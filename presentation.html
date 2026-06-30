@@ -561,12 +561,15 @@
       <p>The push: <strong>OIDC tokens + SSH certificates across the toolchain</strong>, so the same identity
          that authorises a dataset read also authorises a shell — and an agent inherits it cleanly.</p></div>
   </div>
+  <div class="footnote">ssh-oidc: Gudu, Hardt et&nbsp;al. (KIT / EOSC-synergy). &ldquo;SSH with federated identities,&rdquo; CHEP&nbsp;2026; EPJ Res.&nbsp;Infra. 2025, doi:10.1007/s41781-025-00136-5.</div>
   <aside class="notes">
-    KIT/EOSC-synergy work (Marcus Hardt et al.); WLCG x509→token transition is the backdrop.
+    KIT/EOSC-synergy work (Diana Gudu, Marcus Hardt et al.); WLCG x509→token transition is the backdrop.
     Components: oidc-agent (client), motley-cue (server mapping/provisioning), pam-ssh-oidc, oinit (cert CA), mccli (wrapper).
-    Indico talk Giordon flagged (indico.cern.ch/event/1471803/contributions/6967098) = the SSH-certificates push; cite it.
-    NIKHEF/EUROPE ANGLE: this is EGI/EOSC/AARC-native and KIT-led — name-drops well in Amsterdam; ties to PDP federated identity.
-    Detail in research.md §ssh-oidc. Backup slide below for PAM-vs-cert mechanics if asked.
+    CITATION VERIFIED: the CHEP-2026 contribution is "SSH with federated identities" (Gudu, Hardt, KIT;
+    co-author Zachmann), indico.cern.ch/event/1471803/contributions/6967098 — now on the footnote.
+    NIKHEF/EUROPE ANGLE: this is EGI/EOSC/AARC-native and KIT-led — name-drops well in Amsterdam; ties to
+    PDP federated identity and David Groep's AARC area. Detail in research.md §ssh-oidc. Backup slide below
+    for PAM-vs-cert mechanics if asked.
   </aside>
 </section>
 
