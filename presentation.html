@@ -687,12 +687,12 @@
   <p class="kicker">Agenda &middot; portability of environments</p>
   <h2><span class="accent">pixi-native</span> facility operations</h2>
   <div class="content">
-    <ul>
-      <li>The classic failure: &ldquo;works on the login node, breaks on the worker.&rdquo; Batch nodes have small memory, tight storage, and often <strong>no public internet</strong>.</li>
-      <li><strong>pixi</strong> gives every project a locked, reproducible conda+PyPI environment; <strong>pixi-pack</strong> ships that exact environment into a batch job as a self-contained artifact (no CVMFS, no network needed).</li>
-      <li>Backed by <strong>conda-forge</strong> + the HEP Packaging Community: ARM/HPC builds, supply-chain hardening (dependency cooldowns).</li>
-    </ul>
-    <div class="callout teal" style="margin-top:8px;">
+    <p>The classic failure: &ldquo;works on the login node, breaks on the worker.&rdquo; Batch nodes are small and often have <strong>no public internet</strong>. <strong>pixi</strong> locks the environment; <strong>pixi-pack</strong> ships that exact env into the job as a self-contained artifact.</p>
+    <div style="text-align:center; margin:8px 0;">
+      <img src="images/NEW-pixi-pack.svg" alt="A pixi project with a digest-pinned pixi.lock on the login node is packed by pixi-pack into a self-contained environment.tar, shipped without CVMFS, and recreated by pixi-unpack on a network-free worker node with an identical environment" style="max-width:100%; max-height:212px;">
+    </div>
+    <p style="font-size:13.5pt; margin:0;">Backed by <strong>conda-forge</strong> + the HEP Packaging Community: ARM/HPC builds, supply-chain hardening (dependency cooldowns).</p>
+    <div class="callout teal" style="margin-top:10px;">
       <p>Why it matters for agents: an agent that builds an analysis must <strong>ship the same environment
          it tested</strong> to the cluster. pixi makes &ldquo;the env the agent used&rdquo; a portable, verifiable object.</p></div>
   </div>
@@ -701,7 +701,10 @@
     pixi-pack self-extracting binaries, Apptainer note) in research.md §pixi.
     NIKHEF ANGLE: reproducible, network-free batch environments are a Tier-1/PDP win independent of AI;
     the AI angle is just that agentic workflows make it non-negotiable.
-    TODO(deck): a tiny before/after diagram (login env → pixi-pack → worker) as images/NEW-pixi-pack.svg.
+    Diagram is images/NEW-pixi-pack.svg (login pixi project + pixi.lock → pixi-pack → environment.tar →
+    ship without CVMFS → pixi-unpack on a network-free worker → identical env). Real adoption to mention:
+    Purdue AF migrated Conda→pixi (Dask Gateway via new_cluster(pixi_project=...)), Oregon State HPC docs.
+    Facilities often prefer Apptainer over Docker for security.
   </aside>
 </section>
 
