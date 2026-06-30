@@ -14,32 +14,12 @@
 <link rel="stylesheet" href="styles.css">
 
 <!--
-================================================================================
-  REBUILD NOTES FOR THE NEXT SESSION  (read me first)
-================================================================================
-  Context: This is the Nikhef interview colloquium (1 Jul 2026), rebuilt from the
-  USATLAS Throughput-Computing-Week deck. Decisions already made with Giordon:
-    • FRAMING  = vision-first (field direction + agenda for Nikhef), not portfolio.
-    • DEPTH    = layered: a broad main line any Nikhef physicist follows, with
-                 optional technical DEEP-DIVE / BACKUP slides flagged as such.
-    • SCOPE    = restructured flow; existing slides redrafted for Nikhef and made
-                 less ATLAS-centric (ATLAS = current employer; CMS/DUNE/Belle II =
-                 informal collaboration on these AI ideas).
-    • LENGTH   = ~45 min talk + ~15 min discussion (14:00 colloquium, 15:00 break).
-
-  Conventions in this file:
-    • [[FILL: ...]]            = prose/number/example Giordon must supply.
-    • TODO(deck): ...          = structural task for the next Claude session.
-    • "DEEP-DIVE" / "BACKUP" markers (in HTML comments) = optional slide; skip in a time crunch.
-    • images/NEW-*.png         = asset that does NOT exist yet; create or replace.
-    • Slides marked "SKELETON" are intentionally thin: header + thesis + stubs +
-      rich speaker notes telling you what to build. Redrafted-existing slides are
-      fuller but still want a Nikhef pass.
-
-  The companion file  nikhef_colloquium_research.md  has the vetted technical
-  detail (CIMD vs DCR, ssh-oidc/oinit, ESCAPE, pixi-pack, AF-MCP, etc.) — pull
-  facts from there rather than re-researching.
-================================================================================
+  "The Facility Is the Context" — Nikhef colloquium (2026-07-01), Giordon Stark.
+  Vision-first, layered: a broad main line plus optional DEEP-DIVE / BACKUP slides in
+  vertical stacks (down-arrow within a section). ~45 min talk + ~15 min discussion.
+  Editing conventions, theme, vertical-stack map, and the gotchas are in CLAUDE.md.
+  The vetted facts behind the speaker notes live in nikhef_colloquium_research.md
+  (local only, gitignored — it carries internal detail beyond the public slides).
 -->
 </head>
 <body>
@@ -111,8 +91,7 @@
     Deliver it as a thesis, then promise the structure: (1) a working existence proof, (2) the
     architecture that makes it portable, (3) the agenda — identity, trust, packaging, equity — and
     (4) Nikhef + ESCAPE + discussion.
-    TODO(deck): keep this slide tight; it replaces the old "whole talk in one example" opener but
-    pitches it as a research thesis rather than a storage anecdote (that anecdote moves to the next slide).
+    Keep this slide tight: it's the research thesis, not a storage anecdote (that's the next slide).
   </aside>
 </section>
 
@@ -180,7 +159,7 @@
   <aside class="notes">
     Keep FAST — this room is mixed (theory, GW, neutrino, computing). 60–90 s max. The Watts framing
     slide moves to a vertical backup (down-arrow) so the main line doesn't stall on related work.
-    TODO(deck): trim to whatever the layered timing allows; this is main-line but compressible.
+    Timing: this is main-line but compressible — trim to whatever the layered pacing allows.
   </aside>
 </section>
 
@@ -216,7 +195,7 @@
 </section>
 
 <section id="proof-tour">
-  <!-- SKELETON: condensed "what runs today" montage -->
+  <!-- condensed "what runs today" montage -->
   <p class="kicker">Running today at the UChicago AF</p>
   <h2>A facility that <span class="accent">teaches agents about itself</span></h2>
   <div class="content">
@@ -239,9 +218,8 @@
     </div>
   </div>
   <aside class="notes">
-    TODO(deck): this single montage REPLACES old slides 5,6,7,8,9,10,11,11b. Each card maps to one
-    old slide; promote any ONE to its own full slide only if you want a live demo (Jupyter-from-phone
-    is the crowd-pleaser; the condor morning-report screenshot is the credibility shot).
+    This single montage condenses the whole "what runs today" tour; each card is a thing you can
+    open in questions. The Jupyter-from-phone card is promoted to its own live-demo slide (next).
     Assets to reuse: images/htcondor-daily-report-slack.png, images/jupyter-mcp-demo.mp4,
     images/webui-landing.png.
     MAIN-LINE script: "I'll show the shape, not every screen — ask me in questions for any of these."
@@ -397,7 +375,7 @@
 </section>
 
 <section id="arch-playbook">
-  <!-- SKELETON: reasoning engine vs playbook, condensed -->
+  <!-- reasoning engine vs playbook, condensed -->
   <p class="kicker">Architecture &middot; portability concretely</p>
   <h2>Same engine, different <span class="accent">playbook</span></h2>
   <div class="content">
@@ -439,7 +417,6 @@
 <!-- 3a. THE GATEWAY: AF-MCP -->
 <section>
 <section id="agenda-gateway">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; the platform boundary</p>
   <h2>A credential-brokered <span class="accent">MCP gateway</span></h2>
   <div class="content">
@@ -491,7 +468,6 @@
 <!-- 3b. IDENTITY: DCR vs CIMD, token adoption -->
 <section>
 <section id="agenda-identity">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; identity is the bottleneck</p>
   <h2>Who is this agent, and may it act <span class="accent">as you</span>?</h2>
   <div class="content">
@@ -546,7 +522,6 @@
 <!-- 3c. SSH-LESS LOGIN -->
 <section>
 <section id="agenda-ssh">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; access without keys</p>
   <h2>ssh-less, key-less: <span class="accent">log in with your federated identity</span></h2>
   <div class="content">
@@ -590,7 +565,6 @@
 <!-- 3d. SANDBOXING / TRUST -->
 <section>
 <section id="agenda-sandbox">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; what may an agent do?</p>
   <h2>Sandboxing on (and off) <span class="accent">Kubernetes</span></h2>
   <div class="content">
@@ -651,7 +625,7 @@
 </section>
 
 <section id="agenda-trust-ladder">
-  <!-- SKELETON : trust ladder + eval harness (OSG-LHC doc Concept 1 + 11) -->
+  <!-- trust ladder + eval harness (OSG-LHC doc Concept 1 + 11) -->
   <p class="kicker">Agenda &middot; earned autonomy</p>
   <h2>A trust ladder, with <span class="accent">promotion gates</span></h2>
   <div class="content">
@@ -681,7 +655,6 @@
 <!-- 3e. PACKAGING: pixi-native -->
 <section>
 <section id="agenda-pixi">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; portability of environments</p>
   <h2><span class="accent">pixi-native</span> facility operations</h2>
   <div class="content">
@@ -707,7 +680,7 @@
 </section>
 
 <section id="agenda-cluster-as-code">
-  <!-- SKELETON : k8s-based deployment / GitOps -->
+  <!-- k8s-based deployment / GitOps -->
   <p class="kicker">Agenda &middot; deploying the cluster itself</p>
   <h2>The cluster as <span class="accent">declarative code</span></h2>
   <div class="content">
@@ -730,7 +703,6 @@
 
 <!-- 3f. AI AT EVERY LAYER -->
 <section id="agenda-levels">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; from analyst to sysadmin</p>
   <h2>AI at <span class="accent">every layer</span> of the facility</h2>
   <div class="content">
@@ -755,7 +727,6 @@
 
 <!-- 3g0. OPERATIONAL AI FOR THE FACILITY FABRIC (OSG-LHC doc 3/5/9/10) -->
 <section id="agenda-fabric">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; the fabric beneath analysis</p>
   <h2>Operational AI for <span class="accent">shared infrastructure</span></h2>
   <div class="content">
@@ -857,7 +828,6 @@
 <!-- 3h. AGENTS DON'T GET THE OPEN WEB + SKILLS GOVERNANCE -->
 <section>
 <section id="agenda-openweb">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; a security reality</p>
   <h2>Agents don&rsquo;t get the <span class="accent">open web</span></h2>
   <div class="content">
@@ -881,7 +851,6 @@
 </section>
 
 <section id="agenda-skills-commons">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; where context lives</p>
   <h2>One commons, not a <span class="accent">dozen forks</span></h2>
   <div class="content">
@@ -930,7 +899,6 @@
 </section>
 
 <section id="escape">
-  <!-- SKELETON -->
   <p class="kicker">A bridge that already exists</p>
   <h2>The agentic layer, meet <span class="accent">ESCAPE</span></h2>
   <div class="content">
@@ -964,7 +932,7 @@
 
 <section>
 <section id="iris-osg">
-  <!-- SKELETON : IRIS-HEP / OSG-LHC upstream services (built from the doc) -->
+  <!-- IRIS-HEP / OSG-LHC upstream services (built from the doc) -->
   <p class="kicker">&hellip;and upstream of every experiment</p>
   <h2>The same patterns at the <span class="accent">service layer</span></h2>
   <div class="content">
@@ -1043,12 +1011,12 @@
   <aside class="notes">
     Closing provocation = the thesis restated as a to-do list. Then a SINGLE forward slide: "what I'd
     build first at Nikhef" (next). These six map 1:1 to the §3 agenda, so the audience can re-enter any thread.
-    TODO(deck): if running long, this slide + the next can merge.
+    If running long, this slide and the next can merge.
   </aside>
 </section>
 
 <section id="first-90-days">
-  <!-- SKELETON : the concrete "what I'd do here" close -->
+  <!-- the concrete "what I'd do here" close -->
   <p class="kicker">If I joined</p>
   <h2>What I&rsquo;d build <span class="accent">first</span></h2>
   <div class="content">
