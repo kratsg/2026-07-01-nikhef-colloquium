@@ -448,13 +448,10 @@
     <p>One endpoint in front of the facility&rsquo;s services. The LLM client <strong>never holds raw
        credentials</strong>; the broker authenticates the user, mints per-service credentials, and
        audits every tool call.</p>
-    <pre><code class="block">client  ──►  mcp.&lt;facility&gt;  (oauth2-proxy → Keycloak OIDC)
-            │
-            ▼   FastMCP aggregator + credential broker
-            ├── rucio-mcp     ├── condor-mcp
-            ├── ami / metadata ├── jupyter-control
-            └── … Nth backend (no code change)</code></pre>
-    <div class="callout teal" style="margin-top:10px;">
+    <div style="text-align:center; margin:10px 0;">
+      <img src="images/NEW-af-mcp-arch.svg" alt="LLM client to mcp.af.uchicago.edu front door (oauth2-proxy, Keycloak OIDC), through a FastMCP aggregator and credential broker doing identity, authZ, credential brokering and audit, fanning out to Rucio, PanDA, AMI, GitLab, Jupyter, HTCondor and an Nth backend" style="max-width:100%; max-height:330px;">
+    </div>
+    <div class="callout teal" style="margin-top:6px;">
       <p>This is the <strong>strategic boundary</strong>: identity, authZ, credential brokering, and audit
          in one place. It&rsquo;s the natural way to put an agentic layer in front of a <strong>Tier-1 / PDP</strong>
          service estate without handing tokens to a chatbot.</p></div>
@@ -465,7 +462,12 @@
     NIKHEF PITCH: "front the Tier-1 + PDP services this way; the broker is where Nikhef's identity
     and audit policy lives." Connect explicitly to PDP's 'trusted collaboration for open science'.
     DEEP-DIVE backup = the topology slide (next, down-arrow).
-    TODO(deck): redraw the ASCII as images/NEW-af-mcp-arch.svg for the talk; ASCII is fine as a notes crutch.
+    Diagram is images/NEW-af-mcp-arch.svg: client (bearer token only) -> mcp.af.uchicago.edu
+    (oauth2-proxy -> Keycloak OIDC) -> FastMCP aggregator + credential broker (Identity / AuthZ /
+    Credential brokering / Audit) -> Rucio, PanDA, AMI, GitLab, Jupyter, HTCondor, Nth backend.
+    Say out loud: the broker is the ONLY thing that ever touches raw x509/IAM; the client just
+    carries a short-lived bearer token. Deployed via Flux CD/Helm; portal at
+    portal.af.uchicago.edu/tokens issues the bearer tokens. ~800 users behind the one endpoint.
   </aside>
 </section>
 
