@@ -66,15 +66,16 @@
   </div>
   <div class="footnote">Slides AI-assisted by Claude (Anthropic) &middot; title illustration AI-generated.</div>
   <aside class="notes">
-    TODO(deck): Opening 60 seconds, set the VISION frame, not a tools tour.
-    Script beats: (1) I build computing infrastructure for physics analysis — facilities,
+    Opening 60 seconds, set the VISION frame, not a tools tour.
+    Open by locating myself in a breath: quick context on me, I'm a Deaf experimental physicist
+    at UC Santa Cruz, I build statistical tools like pyhf and the analysis-facility infrastructure
+    that ATLAS physics runs on.
+    Then the script beats: (1) I build computing infrastructure for physics analysis — facilities,
     statistical tooling, and now the agentic layer. (2) Today is not "look at my chatbot"; it's
     an argument about where the hard problems are as LLM agents enter research computing, and what
     I would build at Nikhef. (3) I am on ATLAS; the ideas here already reach CMS, DUNE, Belle II,
     and ESCAPE, which is the point. Name the layered promise: a main line everyone follows, with
     deep-dives I am happy to take in questions.
-    [[FILL: one sentence locating yourself for a room that may not know you — Deaf physicist,
-    pyhf, AF infrastructure — keep it to a breath.]]
   </aside>
 </section>
 
@@ -134,10 +135,11 @@
       <div class="card teal">
         <p class="card-icon"><i class="fa-solid fa-microchip"></i></p>
         <h3>An LLM that knows the facility</h3>
-        <p>Big outputs &rarr; bulk scratch/data; small summaries &rarr; backed-up home. It knows the quotas, mounts, and cache.</p>
+        <p>Big outputs &rarr; fast <strong>local scratch</strong> (SSD/NVMe, wiped after the job); small summaries &rarr; the small <strong>backed-up home</strong> that persists.</p>
       </div>
     </div>
-    <div class="callout" style="margin-top: 20px;">
+    <p class="text-muted" style="font-size:12.5pt; margin-top:12px;">The axes it reasons over: <strong>ephemeral vs persistent</strong> &middot; <strong>local SSD/NVMe vs network-mounted</strong> (dCache, XCache) &middot; <strong>user vs project space</strong> &middot; small+quota'd vs bulk.</p>
+    <div class="callout" style="margin-top: 16px;">
       <p class="label">The point</p>
       <p>The model didn&rsquo;t get smarter — we gave it <strong>facility context</strong>. Hold this
          example; every later idea is a way to deliver context like this <em>safely</em> and
@@ -146,10 +148,12 @@
   </div>
   <aside class="notes">
     Redrafted from the old TopCPToolkit/ntuple slide, DE-ATLAS-IFIED so a Virgo or KM3NeT person
-    still nods. Keep it generic ("outputs/summaries", "bulk vs backed-up") in the main line; the
-    ATLAS-specific /home-100GB-vs-/data-5TB version can be a one-liner aside for the LHC people.
-    TODO(deck): optionally swap in a Nikhef-flavoured path example once Giordon confirms the local
-    storage vocabulary (dCache / project space / Tier-1 scratch). [[FILL: Nikhef storage layout if known.]]
+    still nods. The teaching point is the AXES a facility-aware agent weighs, not a Nikhef-specific
+    path: ephemeral fast local scratch (SSD/NVMe, local-mounted, gone after the job) vs the small
+    backed-up home that survives sessions; user space vs shared project space; what's network-mounted
+    or cached (dCache / XCache) vs what's local. Name those as generic examples, don't claim Nikhef's
+    exact layout. The ATLAS-specific /home-vs-/data quota numbers can be a one-liner aside for the LHC
+    people, but the room is mixed so lead with the concepts.
   </aside>
 </section>
 
