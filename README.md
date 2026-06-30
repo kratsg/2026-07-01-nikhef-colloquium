@@ -1,14 +1,18 @@
-# LLM-Assisted Analysis at the UC AF
+# The Facility Is the Context
 
-Slides for the talk **"LLM Assisted Analysis at the UC AF"** — the USATLAS Face-to-Face
-session at Throughput Computing Week 2026 (HTC26), 2026-06-09, by Giordon Stark on behalf
-of the UChicago Analysis Facility team.
+Slides for the **Nikhef interview colloquium** (Amsterdam, 1 July 2026) by Giordon Stark
+(UC Santa Cruz / SCIPP): *"The Facility Is the Context — agentic computing infrastructure
+for analysis at scale."*
 
-**▶ View the deck:** https://kratsg.github.io/throughput-computing-2026-slides/
+**▶ View the deck:** https://kratsg.github.io/2026-07-01-nikhef-colloquium/
 
-The deck argues one thing: a generic LLM isn't enough — the value comes from wrapping
-**facility context** (storage, scheduler etiquette, data access) and ATLAS tools behind
-agentic interfaces, built so the framework is shared and the context ports to the next AF.
+The talk argues one thing: as LLM agents arrive in scientific computing, the decisive layer
+is not the model but the **facility's own context, identity, and trust boundaries** — and that
+layer ports across experiments and sciences. Drawing on a working deployment at the UChicago
+ATLAS Analysis Facility (now also serving CMS, DUNE, and ESCAPE data access), it lays out what
+runs today, the architecture that makes it portable, and an agenda of open problems:
+credential-brokered MCP gateways, OIDC/SSH-certificate adoption, sandboxing on and off
+Kubernetes, pixi-native batch environments, and equitable access to inference.
 
 ## What's here
 
@@ -16,10 +20,16 @@ agentic interfaces, built so the framework is shared and the context ports to th
 |------|------------|
 | `presentation.html` | The deck (reveal.js 6.0.1, loaded from CDN — no build step) |
 | `styles.css` | UChicago-maroon theme (CSS variables, `pt` font sizing) |
-| `images/` | Committed figures + the web-friendly demo video (`jupyter-mcp-demo.mp4`) |
-| `talk-notes.md` | Front-loaded Decisions / Milestones / Action Items / Notes for the agenda |
+| `images/` | Committed figures, the demo video, and the hand-authored `NEW-*.svg` diagrams |
 | `.agents/skills/` | The `revealjs` build skill + `grill-me`, used to author the deck |
 | `.github/workflows/deploy.yml` | Auto-publishes to GitHub Pages on push to `main` |
+
+## Structure
+
+Vision-first and **layered**: a broad main line any physicist can follow, with optional
+technical **deep-dive / backup** slides (reachable by down-arrow in the vertical stacks).
+Five sections: the thesis → an existence proof → the architecture that makes it portable →
+the agenda of open problems → Nikhef, ESCAPE, and the discussion.
 
 ## View it
 
@@ -28,11 +38,13 @@ agentic interfaces, built so the framework is shared and the context ports to th
   need a network connection the first time.
 - **Speaker notes:** press **`S`** in the browser (allow the popup) for speaker view —
   current + next slide, notes, and a timer. Every slide has notes.
+- **Build stamp:** a small footer reads `dev` locally and `<short-sha> · <date>` on the
+  deployed site, so you can tell which version is live.
 
 ## Edit it
 
-The deck is plain HTML + CSS. Edit `presentation.html` directly (one slide / a few slides
-at a time), or use the in-browser editor from the reveal.js skill:
+Edit `presentation.html` directly (one slide / a few slides at a time), or use the in-browser
+editor from the reveal.js skill:
 
 ```bash
 node .agents/skills/revealjs/scripts/edit-html.js presentation.html
@@ -57,14 +69,13 @@ node .agents/skills/revealjs/scripts/check-overflow.js presentation.html
 ## Deploy
 
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which publishes
-`presentation.html` (as `index.html`) + `styles.css` + `images/` to GitHub Pages and
-attaches a best-effort `slides.pdf`. One-time setup: repo **Settings → Pages → Source:
-GitHub Actions**.
+`presentation.html` (as `index.html`) + `styles.css` + `images/` to GitHub Pages, injects the
+build stamp, and attaches a best-effort `slides.pdf`. One-time setup: repo **Settings → Pages →
+Source: GitHub Actions**.
 
 ## Credits
 
-Slides AI-assisted by Claude (Anthropic). Title illustration and the sports-team analogy
-image are AI-generated (the latter via Google Gemini); the Gordon Watts "Analysis
-Ecosystem" boat is from his CHEP 2026 slides (© Watts + AI). OpenWebUI and Slack
-screenshots are real captures. Built in the spirit of Gordon Watts' CHEP 2026 ecosystem
-framing.
+Slides AI-assisted by Claude (Anthropic). The title illustration is AI-generated; the
+architecture (`NEW-af-mcp-arch.svg`) and pixi-pack (`NEW-pixi-pack.svg`) diagrams are
+hand-authored. OpenWebUI / Slack screenshots and the Jupyter MCP video are real captures.
+Built in the spirit of Gordon Watts' CHEP 2026 ecosystem framing.
