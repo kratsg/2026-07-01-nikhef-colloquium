@@ -779,13 +779,15 @@
     NIKHEF ANGLE: this is the Tier-1 / PDP pitch — Nikhef hosts the Dutch LHC Tier-1 and runs federated
     e-infrastructure; "upstream services" framing makes the impact argument, and heterogeneous-accelerator
     efficiency ties to the AI/ML group's GPU needs. Keep main line to the 4 cards; each is a backup if pressed.
-    [[FILL: Nikhef Tier-1 specifics if you want to localise (don't say GridKA — that's KIT).]]
+    Framing kept generic ("upstream of every experiment / Tier-1 concern") rather than naming Nikhef Tier-1
+    internals — the PDP/Tier-1 resonance lands without claiming specifics. (Nikhef hosts the Dutch LHC
+    Tier-1; do not say GridKA, that's KIT.)
   </aside>
 </section>
 
 <!-- 3g. EQUITY / WHO PAYS -->
+<section>
 <section id="agenda-equity">
-  <!-- SKELETON -->
   <p class="kicker">Agenda &middot; equitable access to inference</p>
   <h2>Who gets to use the models — and <span class="accent">who pays?</span></h2>
   <div class="content">
@@ -798,8 +800,11 @@
     </ul>
     <div class="callout" style="margin-top:8px;">
       <p>This is squarely a <strong>computing-infrastructure responsibility</strong>: GPUs, model hosting, and
-         a fair-share policy are facility decisions, not personal ones.</p></div>
+         a fair-share policy are facility decisions, not personal ones. The cost is already real &mdash; a full
+         agentic analysis runs to <strong>~1M+ tokens</strong>, tens to hundreds of dollars per run at frontier
+         rates (numbers below).</p></div>
   </div>
+  <div class="footnote">Agents already perform full HEP analyses end-to-end &mdash; Moreno et&nbsp;al., arXiv:2603.20179 &mdash; and that run kept stalling on usage rate-limits: access is already the binding constraint.</div>
   <aside class="notes">
     The brief's "equitable access to LLMs through hosting open-models + hosting foundational models used
     by experiments." Tie to the model-swap slide (§2): self-hosting open weights was already framed as
@@ -808,8 +813,47 @@
     natural institutional value to name out loud. Also connects to "foundational models for experiments"
     = e.g. hosting large reconstruction/sim-surrogate models centrally. The token-exchange bullet is
     OSG-LHC doc Concept 4 (RFC 8693: WLCG/SciTokens → scoped token for nrp.ai-style backends, MCP-aware).
-    [[FILL: any numbers on inference cost at HL-LHC scale you're comfortable quoting; else keep qualitative.]]
+    COST: down-arrow backup has the per-run numbers. Be clear the 1M-in + 1M-out figure is MY illustrative
+    floor (code-gen is ~1:1), NOT a number from the Moreno paper — the paper reports only a ~$200/mo Claude
+    Max subscription and ~10h wall-clock with rate-limit idle. The rate-limit detail IS the equity hook.
   </aside>
+</section>
+
+<section id="agenda-equity-cost">
+  <!-- DEEP-DIVE / BACKUP : per-run inference cost spread -->
+  <p class="kicker">Deep-dive &middot; what a run costs</p>
+  <h2>Per analysis: <span class="accent">tens to hundreds</span> of dollars</h2>
+  <div class="content">
+    <p style="margin:0 0 4px;">Cost of <strong>one</strong> agentic analysis &asymp; <strong>1M input + 1M output tokens</strong> (code-gen is roughly 1:1) &mdash; a <em>floor</em>, not a conservative estimate.</p>
+    <div style="display:grid; grid-template-columns: 210px 1fr; gap:4px 14px; align-items:center; font-size:12.5pt; margin-top:4px;">
+      <p style="margin:0; text-align:right;">GPT-5.x Pro</p>
+      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:560px; background:var(--maroon); border-radius:3px;"></span><strong>$210</strong></div>
+      <p style="margin:0; text-align:right;">o3-pro</p>
+      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:267px; background:var(--maroon); border-radius:3px;"></span><strong>$100</strong></div>
+      <p style="margin:0; text-align:right;">GPT-5.x</p>
+      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:93px; background:var(--maroon); border-radius:3px;"></span><strong>$35</strong></div>
+      <p style="margin:0; text-align:right;">Claude Opus 4.8</p>
+      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:80px; background:var(--maroon); border-radius:3px;"></span><strong>$30</strong></div>
+      <p style="margin:0; text-align:right;">Claude Sonnet 4.6</p>
+      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:48px; background:var(--teal); border-radius:3px;"></span><strong>$18</strong></div>
+      <p style="margin:0; text-align:right;">Qwen3.5 <span class="text-muted" style="font-size:10.5pt;">(open weight)</span></p>
+      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:21px; background:var(--teal); border-radius:3px;"></span><strong>$8</strong></div>
+      <p style="margin:0; text-align:right;">Claude Haiku</p>
+      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:16px; background:var(--teal); border-radius:3px;"></span><strong>$6</strong></div>
+    </div>
+    <div class="callout teal" style="margin-top:10px;">
+      <p>Self-hosting <strong>open weights</strong> on facility GPUs collapses the per-run cost to ~GPU time &mdash;
+         the equity lever. A credit-card-per-student model does the opposite, between groups and between countries.</p></div>
+  </div>
+  <div class="footnote">Per-Mtok list prices, ballpark (input&nbsp;+&nbsp;output); 1M&nbsp;+&nbsp;1M illustrative. Agents already run analyses end-to-end: Moreno et&nbsp;al., arXiv:2603.20179.</div>
+  <aside class="notes">
+    BACKUP (down-arrow from equity). The bars are $/run for 1M-in + 1M-out at list prices: GPT-5.x Pro $210,
+    o3-pro $100, GPT-5.x $35, Opus 4.8 $30, Sonnet 4.6 $18, Qwen3.5 (open) $8, Haiku $6. Two honest caveats
+    to say aloud: (1) 1M+1M is MY floor estimate, not from a paper; a real analysis can be much more.
+    (2) open-weight API prices shown for comparison — the real win is self-hosting on facility GPUs, where
+    marginal cost is GPU time, not per-token. That is exactly why equitable inference is a facility decision.
+  </aside>
+</section>
 </section>
 
 <!-- 3h. AGENTS DON'T GET THE OPEN WEB + SKILLS GOVERNANCE -->
@@ -850,7 +894,10 @@
     </ul>
     <div class="callout" style="margin-top:8px;">
       <p>I already operate a marketplace others are converging toward (following agentskills.io practice).
-         The open question for Nikhef &amp; ESCAPE: <strong>what is the European/Tier-1 contribution to that commons?</strong></p></div>
+         The <strong>open question</strong> for Nikhef &amp; ESCAPE: what is the European/Tier-1 contribution to that
+         commons? <strong>ESCAPE is the model</strong> for how such a collaboration forms and persists. On the US
+         side, an <strong>AI proto-collaboration</strong> (umbrella over IRIS-HEP and other funded projects + research
+         groups, open to international collaborators) updates at <strong>DPF, July&nbsp;2026</strong>.</p></div>
   </div>
   <aside class="notes">
     From the same AMG thread (Giordon, Zach Marshall, Gordon Watts, Tomas Dado, Giovanni). Points to draw
@@ -860,7 +907,13 @@
     orthogonal (Giovanni's Lumi skill-design guide). agentskills.io = the practice Giordon follows.
     research.md §skills-governance. Ties directly to #discuss "who maintains context".
     NIKHEF ANGLE: positions Giordon as already running the commons, and frames a concrete European/ESCAPE role.
-    [[FILL: optionally name the DPF Community Meeting / upcoming AMG discussion as the live forum.]]
+    LIVE FORUM (the half-on-slide answer): we do NOT yet have the European contribution to the commons; pose
+    it as open. ESCAPE is the model for how such a collaboration could form and persist. On the US side
+    (open to international collaborators) there's an AI proto-collaboration update at the upcoming DPF meeting
+    (indico.fnal.gov/event/72820, 2026-07-23): CLARIPHY runs a dedicated Slack workspace for the AI
+    proto-collaboration; the framing is that the AI collaboration is an UMBRELLA bringing together multiple
+    funded projects (IRIS-HEP is just one) plus individual research-group contributions. Name CLARIPHY/DPF
+    aloud if asked; keep the slide to "US-side AI proto-collaboration, DPF July 2026".
   </aside>
 </section>
 </section>
