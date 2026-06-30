@@ -530,11 +530,18 @@
   "client_name":"…","redirect_uris":[…] }   ← hosted by the client</code></pre>
     <ul style="font-size:13pt;">
       <li><strong>Wins:</strong> no <code>/register</code> abuse surface; stable identity per app; domain-based allow/deny.</li>
-      <li><strong>Costs:</strong> server makes outbound fetches &rarr; <strong>SSRF</strong> risk (block private IPs, HTTPS-only, size/timeout caps); localhost ambiguity; domain ≠ trust.</li>
+      <li><strong>Costs:</strong> server makes outbound fetches &rarr; <strong>SSRF</strong> risk (block private IPs, HTTPS-only, size/timeout caps); localhost ambiguity; domain &ne; trust.</li>
     </ul>
+    <p class="text-muted" style="font-size:12pt; margin-top:8px;">Concretely in FastMCP: <code>CIMDTrustPolicy(trusted_domains=["claude.ai","cursor.com"], auto_approve_trusted=True)</code> &mdash; the facility decides which domains skip consent.</p>
   </div>
-  <aside class="notes">BACKUP. Sources: MCP blog, Auth0/WorkOS/Stytch writeups, SEP-991, IETF draft (research.md §CIMD).
-  Software statements / OS attestation are the next layer if asked.</aside>
+  <aside class="notes">BACKUP. The client_id IS the HTTPS URL to a metadata doc the client hosts; the authn server
+  fetches it on demand, validates client_id == source URL and the redirect_uris, then applies its own
+  policy. Read-only, stateless, fetch-on-demand. Spec status: adopted into MCP 2025-11-25 via SEP-991,
+  from an IETF draft promoted to WG status Oct 2025 (origins in IndieAuth; in production at Bluesky);
+  MCP Python SDK added minimal client-side support in v1.23.0, server-side still maturing. Stance:
+  CIMD = SHOULD, DCR = MAY, pre-registration still allowed. Sources: MCP blog, Auth0/WorkOS/Stytch,
+  SEP-991, FastMCP #2863 (research.md §CIMD). Software statements (RFC 7591 §2.3) / OS attestation are
+  the next layer if asked.</aside>
 </section>
 </section>
 
