@@ -32,7 +32,7 @@
   Conventions in this file:
     • [[FILL: ...]]            = prose/number/example Giordon must supply.
     • TODO(deck): ...          = structural task for the next Claude session.
-    • <!-- DEEP-DIVE --> / <!-- BACKUP --> = optional slide; skip in a time crunch.
+    • "DEEP-DIVE" / "BACKUP" markers (in HTML comments) = optional slide; skip in a time crunch.
     • images/NEW-*.png         = asset that does NOT exist yet; create or replace.
     • Slides marked "SKELETON" are intentionally thin: header + thesis + stubs +
       rich speaker notes telling you what to build. Redrafted-existing slides are
@@ -249,19 +249,56 @@
     MAIN-LINE script: "I'll show the shape, not every screen — ask me in questions for any of these."
     Emphasise the multi-VO line (atlas/cms/dune/escape) HARD here; it's the de-ATLAS-ifying beat and
     sets up ESCAPE later.
-    [[FILL: pick 1 demo to actually run live vs. show as screenshot.]]
+    LIVE DEMO: I promote the Jupyter-MCP card to the next slide and run it live (drive an AF notebook
+    from my phone). The embedded video there is the fallback if the AV/wifi misbehaves. Land the line
+    "any agent inherits the facility" here, then say "let me actually show you one."
+  </aside>
+</section>
+
+<section id="proof-jupyter-demo">
+  <!-- LIVE DEMO (promoted from the proof-tour montage); jupyter-mcp-demo.mp4 is the fallback -->
+  <p class="kicker">Running today &middot; let me show you one</p>
+  <h2>A live AF notebook, driven from your <span class="accent">phone</span></h2>
+  <div class="content">
+    <div style="display:grid; grid-template-columns: 0.82fr 1.18fr; gap:26px; align-items:center;">
+      <div>
+        <p>An in-pod <strong>MCP server</strong> exposes a running JupyterLab. Any MCP client &mdash; my
+           laptop, or the phone in my hand &mdash; drives it through the <strong>brokered gateway</strong>.</p>
+        <ul style="font-size:13.5pt; margin-top:6px;">
+          <li>Same identity, same audit as every other tool call.</li>
+          <li>No notebook UI on the device &mdash; just intent in, results out.</li>
+          <li>The agent never sees a credential.</li>
+        </ul>
+      </div>
+      <div style="text-align:center;">
+        <video src="images/jupyter-mcp-demo.mp4" controls muted playsinline
+               style="max-height:430px; max-width:100%; border-radius:10px; box-shadow:0 8px 28px rgba(92,0,0,0.18);"></video>
+      </div>
+    </div>
+  </div>
+  <div class="footnote">Live demo; the recording is the fallback if the network misbehaves.</div>
+  <aside class="notes">
+    THE crowd-pleaser. Run it live: open an MCP client on my phone, ask it to do something in a live
+    AF JupyterLab pod (load a dataset, make a plot), show the result come back. If wifi/AV is shaky,
+    just play the embedded jupyter-mcp-demo.mp4 and narrate it.
+    Mechanism to say out loud: a Jupyter MCP server runs INSIDE the user's notebook pod; the client
+    speaks MCP to it through the same credential-brokered gateway (§3a), so it inherits the user's
+    identity and the audit trail. The point isn't "cool, a phone" — it's that the facility's identity
+    and context travel with the agent to any client, with zero install.
+    Keep it to ~90 seconds; the demo is evidence for the thesis, not the thesis.
   </aside>
 </section>
 
 <section id="proof-multiexp">
-  <!-- SKELETON: explicit multi-experiment slide (NEW, supports de-ATLAS framing) -->
+  <!-- explicit multi-experiment slide (NEW, supports de-ATLAS framing) -->
   <p class="kicker">Not an ATLAS story</p>
   <h2>The same tools already cross <span class="accent">experiments</span></h2>
   <div class="content">
     <ul>
-      <li><strong>ATLAS</strong> — where I work; the deepest playbook today.</li>
-      <li><strong>CMS, DUNE, Belle&nbsp;II</strong> — informal collaboration with colleagues on exactly these agentic ideas; the data-access layer already speaks their VOs.</li>
-      <li><strong>ESCAPE</strong> — a live site behind the hosted Rucio MCP, which is the bridge to the multi-science world (more in §4).</li>
+      <li><strong>ATLAS</strong> — where I work; the deepest playbook, in production at the UChicago AF.</li>
+      <li><strong>CMS &amp; DUNE</strong> — the hosted data-access layer already serves their VOs; informal collaboration with colleagues on these agentic ideas.</li>
+      <li><strong>Belle&nbsp;II</strong> — early discussions on the same ideas.</li>
+      <li><strong>ESCAPE</strong> — a live <code>escape</code> site behind the hosted Rucio MCP: the bridge to the multi-science world (more in §4).</li>
     </ul>
     <div class="callout" style="margin-top:10px;">
       <p>The reason it crosses experiments isn&rsquo;t generosity — it&rsquo;s the architecture (§2): the agent
@@ -269,10 +306,11 @@
     </div>
   </div>
   <aside class="notes">
-    NEW slide, central to the brief's "less ATLAS-focused" ask. Be honest about status words:
-    ATLAS = production; CMS/DUNE/Belle II = informal / in-conversation; ESCAPE = data-access site live.
-    TODO(deck): confirm with Giordon the exact verb for each (e.g. "Belle II: discussions with X").
-    [[FILL: names of the CMS/DUNE/Belle II collaborators you're informally working with, if you want them on-slide or just in notes.]]
+    NEW slide, central to the brief's "less ATLAS-focused" ask. Status words are deliberately graded
+    and honest: ATLAS = production; CMS/DUNE = data-access layer already serves their VOs + informal
+    collaboration; Belle II = early discussions; ESCAPE = data-access site live. No collaborator names
+    on-slide or in notes (kept deliberately out). If asked "who?", answer conversationally; don't put
+    people on the record here.
   </aside>
 </section>
 
