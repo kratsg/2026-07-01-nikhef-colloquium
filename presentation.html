@@ -618,7 +618,11 @@
     laugh beat. bubblewrap / sydbox / blaude as user-space sandboxes; k8s pods as the default. Detail in
     research.md §sandboxing. Deep-dive on policy engines (eBPF) is the next backup slide.
     NIKHEF ANGLE: a Tier-1 with mixed bare-metal can't rely on k8s isolation everywhere.
-    [[FILL: an honest near-miss if you want one — the email-agent race-condition stand-down works well.]]
+    HONEST NEAR-MISS (tell live, don't put on the slide): our held-job email agent hit a race condition
+    once — two agents grabbed the same approval and it nearly double-sent — so we stood email-sending
+    down until it was fixed. The point: human-in-the-loop gates caught it, and we'd rather be honest
+    than pretend it's flawless. Good "we prefer honest over flawless" beat right after the enforcement-gap
+    callout.
   </aside>
 </section>
 
