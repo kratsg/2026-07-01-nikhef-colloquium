@@ -382,16 +382,19 @@
       <div class="card teal"><p style="font-size:12.5pt;">HTCondor &middot; Slurm &middot; Dask &middot; REANA</p></div>
       <div class="card teal"><p style="font-size:12.5pt;">pyhf &middot; cabinetry &middot; RooFit &middot; SBI</p></div>
     </div>
-    <div class="callout" style="margin-top:16px;">
+    <p class="text-muted" style="font-size:12pt; margin-top:10px;"><code>inference_tool</code> privileges no single fitter: <strong>HS3</strong> (HEP Statistics Serialization Standard) + <code>pyhs3</code> are the bridge between pyhf and RooFit.</p>
+    <div class="callout" style="margin-top:12px;">
       <p>The agent never names &ldquo;coffea&rdquo; or &ldquo;condor.&rdquo; That indirection is exactly what lets the
          <strong>same agent move between facilities and experiments</strong>.</p></div>
   </div>
   <aside class="notes">
-    Redrafted from old slide-14. NOTE: I added RooFit and dCache to the backend row as a nod to the
-    Verkerke/Nikhef world — verify Giordon's happy associating inference_tool with RooFit (pyhf↔RooFit
-    via HS3 is the honest bridge; see research.md "HS3/pyhs3").
-    TODO(deck): fold "reasoning engine + playbook" (old slides 15,16) into ONE follow-up slide here
-    rather than three — the sports-team analogy is optional colour.
+    Redrafted from old slide-14. RooFit and dCache are in the backend row as a deliberate nod to the
+    Verkerke/Nikhef world. The on-slide HS3 line pre-empts the stats-interop question: the inference_tool
+    abstraction does not privilege one fitter — HS3 (HEP Statistics Serialization Standard) and pyhs3 are
+    the honest serialization bridge between pyhf and RooFit (research.md §13 / "HS3/pyhs3"). Verkerke wrote
+    RooFit and co-hosts the AI/ML role, so be ready to go deeper here in discussion.
+    The "reasoning engine + playbook" material (old slides 15,16) is folded into the next slide
+    (arch-playbook); the sports-team analogy is optional colour, not in the main line.
   </aside>
 </section>
 
