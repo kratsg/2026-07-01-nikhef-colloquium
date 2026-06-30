@@ -54,6 +54,9 @@
     I would build at Nikhef. (3) I am on ATLAS; the ideas here already reach CMS, DUNE, Belle II,
     and ESCAPE, which is the point. Name the layered promise: a main line everyone follows, with
     deep-dives I am happy to take in questions.
+    ASTROPARTICLE BEAT (say early, for half the room): "I work on ATLAS, but the argument today is
+    about the facility layer — and that layer is the same whether you're reconstructing a neutrino
+    track in KM3NeT, a gravitational-wave candidate in Virgo, or a SUSY event in ATLAS."
   </aside>
 </section>
 
@@ -191,6 +194,38 @@
     Pace change. This section is COMPRESSED relative to the old deck (it was the whole talk; here
     it's evidence for the thesis). Goal: convince the room this is real and running for ~800 users,
     across more than one experiment — then move on. Resist the urge to demo everything.
+  </aside>
+</section>
+
+<section id="proof-operations">
+  <p class="kicker">Existence proof &middot; what I operate</p>
+  <h2>This runs in <span class="accent">production</span>, not a demo</h2>
+  <div class="content">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
+      <div class="card">
+        <h3><i class="fa-solid fa-server"></i> The facility I run</h3>
+        <p>A heterogeneous <strong>Kubernetes</strong> cluster &mdash; GPU nodes, mixed storage &mdash;
+           for USATLAS Operations, serving <strong>~800 users</strong>. Dask Gateway for distributed
+           compute; automated benchmarking with real analysis workflows.</p>
+      </div>
+      <div class="card teal">
+        <h3><i class="fa-solid fa-microchip"></i> Already an AI/ML platform</h3>
+        <p><strong>Triton Inference-as-a-Service</strong> for ML model serving; a <strong>REANA</strong>
+           cluster for preserved, reusable workflows. The agentic layer sits on top of infrastructure
+           I <em>already operate</em>.</p>
+      </div>
+    </div>
+    <div class="callout teal" style="margin-top:14px;">
+      <p>Everything that follows is built on a working data-processing facility &mdash; this is
+         <strong>systems engineering I do hands-on</strong>, not a slide-deck vision.</p></div>
+  </div>
+  <aside class="notes">
+    Purpose: establish operations + data-processing + ML-serving credibility BEFORE the agentic vision,
+    because the role is data-processing-infrastructure-first. Say out loud: "before I argue about where
+    AI is going, here's the infrastructure I run day to day." Triton IaaS = the literal "infrastructure
+    for AI/ML" in the job title; Dask Gateway + REANA + benchmarking = HTC / data-management / systems
+    operation. Keep it to ~45s; it's a credibility anchor, not a deep dive.
+    [[FILL: exact hardware if you want it — node/GPU count, storage size/PB. Don't invent; omit if unsure.]]
   </aside>
 </section>
 
@@ -405,6 +440,7 @@
   <p class="section-num">03</p>
   <p class="kicker">The agenda</p>
   <h1>What I&rsquo;d build<br>(and what&rsquo;s hard)</h1>
+  <p class="subtitle" style="margin-top:14px;">Three things a facility owns: <strong>identity &amp; trust</strong> &middot; <strong>operations &amp; portability</strong> &middot; <strong>equity &amp; the commons</strong>.</p>
   <aside class="notes">
     THIS IS THE NEW CORE AND THE LONGEST SECTION. Vision-first: each sub-slide = a problem the
     FACILITY owns, the state of the art, and what I'd do at Nikhef. Order is deliberate:
@@ -412,6 +448,16 @@
     Main line = the claim + 2-3 bullets; DEEP-DIVE backups carry the protocol detail.
     All facts for these live in nikhef_colloquium_research.md.
   </aside>
+</section>
+
+<!-- Theme 1 lead-in -->
+<section id="theme-trust" class="section-divider" data-state="is-section-divider">
+  <p class="section-num">3.1</p>
+  <p class="kicker">Agenda &middot; theme one</p>
+  <h1>Identity, access &amp; trust</h1>
+  <aside class="notes">Thesis to say: before an agent does anything useful, the facility has to answer
+    who it is, what it may touch, and how it earns more rope. Covers gateway, CIMD, ssh-oidc, sandboxing,
+    the trust ladder.</aside>
 </section>
 
 <!-- 3a. THE GATEWAY: AF-MCP -->
@@ -477,6 +523,7 @@
         <strong>DCR</strong> (dynamic client registration — stateful, a <code>/register</code> endpoint, operational sprawl)
         vs <strong>CIMD</strong> (the client_id <em>is</em> an HTTPS URL to a metadata doc the server fetches — stateless, domain-trust).</li>
       <li>I favour <strong>CIMD</strong>: no unbounded client DB, stable per-app identity, server-side allow-listing of trusted domains. It&rsquo;s the new MCP default (still firming up; SSRF must be handled).</li>
+      <li>This sits <em>on top of</em>, not instead of, the community&rsquo;s federated-identity work &mdash; WLCG token profiles, the AARC blueprint, IAM. CIMD solves <strong>client</strong> identity in the agent ecosystem; it complements the <strong>user</strong>/token identity chain we already have.</li>
     </ul>
     <div class="callout" style="margin-top:8px;">
       <p>This is a place to <strong>shape the standard</strong>, not just consume it — a facility/Tier-1 voice
@@ -540,8 +587,9 @@
     Components: oidc-agent (client), motley-cue (server mapping/provisioning), pam-ssh-oidc, oinit (cert CA), mccli (wrapper).
     CITATION VERIFIED: the CHEP-2026 contribution is "SSH with federated identities" (Gudu, Hardt, KIT;
     co-author Zachmann), indico.cern.ch/event/1471803/contributions/6967098 — now on the footnote.
-    NIKHEF/EUROPE ANGLE: this is EGI/EOSC/AARC-native and KIT-led — name-drops well in Amsterdam; ties to
-    PDP federated identity and David Groep's AARC area. Detail in research.md §ssh-oidc. Backup slide below
+    NIKHEF/EUROPE ANGLE: frame ssh-oidc as the AARC/EOSC-native answer it is (KIT/EOSC-synergy) — this is
+    the room's OWN ecosystem, not a web-industry import. Say "AARC" explicitly; David Groep (host) is an
+    AARC authority and will appreciate it. Ties to PDP federated identity. Detail in research.md §ssh-oidc. Backup slide below
     for PAM-vs-cert mechanics if asked.
   </aside>
 </section>
@@ -579,7 +627,8 @@
       <p>Today a harness can <em>advise</em> (managed <code>CLAUDE.md</code>, allow-lists) but can&rsquo;t reliably
          <strong>hard-deny</strong> a command at the user level. Real blocking needs a privileged
          <strong>policy engine</strong> on the node, or a sandbox. The instructions help; they are not
-         enforcement &mdash; an agent just lets users 100&times; the bad behaviour we&rsquo;ve had for decades.</p></div>
+         enforcement &mdash; as a fellow facility sysadmin put it, an agent just lets users 100&times; the
+         bad behaviour we&rsquo;ve had for decades.</p></div>
     <p class="text-muted" style="font-size:12.5pt; margin-top:8px;">Graded trust: human-in-the-loop gates for write/submit/email; privileged vs user-space lanes for ops agents.</p>
   </div>
   <aside class="notes">
@@ -652,6 +701,69 @@
 </section>
 </section>
 
+<!-- Theme 2 lead-in -->
+<section id="theme-ops" class="section-divider" data-state="is-section-divider">
+  <p class="section-num">3.2</p>
+  <p class="kicker">Agenda &middot; theme two</p>
+  <h1>Operations &amp; portability</h1>
+  <aside class="notes">Thesis: AI at every operational layer, on environments and clusters that ship and
+    reproduce anywhere. Covers levels, the operational-AI fabric, pixi, cluster-as-code.</aside>
+</section>
+
+<!-- 3f. AI AT EVERY LAYER -->
+<section id="agenda-levels">
+  <p class="kicker">Agenda &middot; from analyst to sysadmin</p>
+  <h2>AI at <span class="accent">every layer</span> of the facility</h2>
+  <div class="content">
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+      <div class="card"><h3><i class="fa-solid fa-user"></i> Analyst-facing</h3>
+        <p>Find data, generate code, submit, recover, fit. Low autonomy, high convenience.</p></div>
+      <div class="card teal"><h3><i class="fa-solid fa-diagram-project"></i> Operations</h3>
+        <p>Cluster health reports, hold-reason triage, drafted user emails — human-approved.</p></div>
+      <div class="card"><h3><i class="fa-solid fa-screwdriver-wrench"></i> Sysadmin-facing</h3>
+        <p>Config/runbook copilots in the privileged lane; trust earned, actions gated.</p></div>
+    </div>
+    <div class="callout teal" style="margin-top:12px;">
+      <p>Same context layer, <strong>different autonomy and blast radius</strong> at each level. The facility
+         decides where the human gate sits.</p></div>
+  </div>
+  <aside class="notes">
+    Reframes the old "agents on your behalf" + Shannon/Elwood material as a LEVELS-OF-AUTONOMY spectrum
+    (the brief asked for "AI/LLM at varying levels, user-facing to sysadmin"). Reuse condor-report and
+    held-job-email screenshots as evidence for the middle column.
+  </aside>
+</section>
+
+<!-- 3g0. OPERATIONAL AI FOR THE FACILITY FABRIC (OSG-LHC doc 3/5/9/10) -->
+<section id="agenda-fabric">
+  <p class="kicker">Agenda &middot; the fabric beneath analysis</p>
+  <h2>Operational AI for <span class="accent">shared infrastructure</span></h2>
+  <div class="content">
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px;">
+      <div class="card"><h3><i class="fa-solid fa-wave-square"></i> Telemetry &rarr; foresight</h3>
+        <p style="font-size:12.5pt;">Anomaly detection over existing monitoring + accounting: reactive firefighting &rarr; proactive, root-cause alerting. Accounting-record integrity as a contained first win.</p></div>
+      <div class="card teal"><h3><i class="fa-solid fa-database"></i> Query-aware caching</h3>
+        <p style="font-size:12.5pt;">The analysis <em>describes</em> the columns it will read; drive XCache/XRootD prefetch from that, not workflow-blind heuristics.</p></div>
+      <div class="card"><h3><i class="fa-solid fa-gauge-high"></i> AI above the scheduler</h3>
+        <p style="font-size:12.5pt;">Forecast runtimes, right-size over-requests, pick MIG profiles, route across heterogeneous/federated resources. The scheduler still places; AI shapes the inputs.</p></div>
+      <div class="card teal"><h3><i class="fa-solid fa-tower-broadcast"></i> Upstream leverage</h3>
+        <p style="font-size:12.5pt;">These sit <strong>upstream of every experiment</strong> (a Tier-1 concern), so even modest gains compound across the whole community.</p></div>
+    </div>
+    <p class="text-muted" style="font-size:12pt; margin-top:8px;">The same intent-tool abstraction sits over a <strong>KM3NeT</strong> reconstruction job or a <strong>Virgo</strong> data-quality pipeline as readily as a Coffea columnar read &mdash; the backend changes, the agent&rsquo;s interface doesn&rsquo;t.</p>
+  </div>
+  <aside class="notes">
+    From the IRIS-HEP/OSG-LHC doc: Concept 3 (operational AI over telemetry), Concept 5 (accounting-record
+    integrity, GRACC), Concept 9 (query-aware predictive caching), Concept 10 (AI above the native
+    scheduler — forecasting / right-sizing / MIG profile selection / federated routing). research.md §OSG-LHC.
+    NIKHEF ANGLE: this is the Tier-1 / PDP pitch — Nikhef hosts the Dutch LHC Tier-1 and runs federated
+    e-infrastructure; "upstream services" framing makes the impact argument, and heterogeneous-accelerator
+    efficiency ties to the AI/ML group's GPU needs. Keep main line to the 4 cards; each is a backup if pressed.
+    Framing kept generic ("upstream of every experiment / Tier-1 concern") rather than naming Nikhef Tier-1
+    internals — the PDP/Tier-1 resonance lands without claiming specifics. (Nikhef hosts the Dutch LHC
+    Tier-1; do not say GridKA, that's KIT.)
+  </aside>
+</section>
+
 <!-- 3e. PACKAGING: pixi-native -->
 <section>
 <section id="agenda-pixi">
@@ -701,57 +813,14 @@
 </section>
 </section>
 
-<!-- 3f. AI AT EVERY LAYER -->
-<section id="agenda-levels">
-  <p class="kicker">Agenda &middot; from analyst to sysadmin</p>
-  <h2>AI at <span class="accent">every layer</span> of the facility</h2>
-  <div class="content">
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
-      <div class="card"><h3><i class="fa-solid fa-user"></i> Analyst-facing</h3>
-        <p>Find data, generate code, submit, recover, fit. Low autonomy, high convenience.</p></div>
-      <div class="card teal"><h3><i class="fa-solid fa-diagram-project"></i> Operations</h3>
-        <p>Cluster health reports, hold-reason triage, drafted user emails — human-approved.</p></div>
-      <div class="card"><h3><i class="fa-solid fa-screwdriver-wrench"></i> Sysadmin-facing</h3>
-        <p>Config/runbook copilots in the privileged lane; trust earned, actions gated.</p></div>
-    </div>
-    <div class="callout teal" style="margin-top:12px;">
-      <p>Same context layer, <strong>different autonomy and blast radius</strong> at each level. The facility
-         decides where the human gate sits.</p></div>
-  </div>
-  <aside class="notes">
-    Reframes the old "agents on your behalf" + Shannon/Elwood material as a LEVELS-OF-AUTONOMY spectrum
-    (the brief asked for "AI/LLM at varying levels, user-facing to sysadmin"). Reuse condor-report and
-    held-job-email screenshots as evidence for the middle column.
-  </aside>
-</section>
-
-<!-- 3g0. OPERATIONAL AI FOR THE FACILITY FABRIC (OSG-LHC doc 3/5/9/10) -->
-<section id="agenda-fabric">
-  <p class="kicker">Agenda &middot; the fabric beneath analysis</p>
-  <h2>Operational AI for <span class="accent">shared infrastructure</span></h2>
-  <div class="content">
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px;">
-      <div class="card"><h3><i class="fa-solid fa-wave-square"></i> Telemetry &rarr; foresight</h3>
-        <p style="font-size:12.5pt;">Anomaly detection over existing monitoring + accounting: reactive firefighting &rarr; proactive, root-cause alerting. Accounting-record integrity as a contained first win.</p></div>
-      <div class="card teal"><h3><i class="fa-solid fa-database"></i> Query-aware caching</h3>
-        <p style="font-size:12.5pt;">The analysis <em>describes</em> the columns it will read; drive XCache/XRootD prefetch from that, not workflow-blind heuristics.</p></div>
-      <div class="card"><h3><i class="fa-solid fa-gauge-high"></i> AI above the scheduler</h3>
-        <p style="font-size:12.5pt;">Forecast runtimes, right-size over-requests, pick MIG profiles, route across heterogeneous/federated resources. The scheduler still places; AI shapes the inputs.</p></div>
-      <div class="card teal"><h3><i class="fa-solid fa-tower-broadcast"></i> Upstream leverage</h3>
-        <p style="font-size:12.5pt;">These sit <strong>upstream of every experiment</strong> (a Tier-1 concern), so even modest gains compound across the whole community.</p></div>
-    </div>
-  </div>
-  <aside class="notes">
-    From the IRIS-HEP/OSG-LHC doc: Concept 3 (operational AI over telemetry), Concept 5 (accounting-record
-    integrity, GRACC), Concept 9 (query-aware predictive caching), Concept 10 (AI above the native
-    scheduler — forecasting / right-sizing / MIG profile selection / federated routing). research.md §OSG-LHC.
-    NIKHEF ANGLE: this is the Tier-1 / PDP pitch — Nikhef hosts the Dutch LHC Tier-1 and runs federated
-    e-infrastructure; "upstream services" framing makes the impact argument, and heterogeneous-accelerator
-    efficiency ties to the AI/ML group's GPU needs. Keep main line to the 4 cards; each is a backup if pressed.
-    Framing kept generic ("upstream of every experiment / Tier-1 concern") rather than naming Nikhef Tier-1
-    internals — the PDP/Tier-1 resonance lands without claiming specifics. (Nikhef hosts the Dutch LHC
-    Tier-1; do not say GridKA, that's KIT.)
-  </aside>
+<!-- Theme 3 lead-in -->
+<section id="theme-commons" class="section-divider" data-state="is-section-divider">
+  <p class="section-num">3.3</p>
+  <p class="kicker">Agenda &middot; theme three</p>
+  <h1>Equity &amp; the commons</h1>
+  <aside class="notes">Thesis: who gets to use the models, what agents may reach, and where shared context
+    lives, these are facility and community decisions, not personal ones. Covers equity, open-web,
+    skills-commons.</aside>
 </section>
 
 <!-- 3g. EQUITY / WHO PAYS -->
@@ -770,8 +839,8 @@
     <div class="callout" style="margin-top:8px;">
       <p>This is squarely a <strong>computing-infrastructure responsibility</strong>: GPUs, model hosting, and
          a fair-share policy are facility decisions, not personal ones. The cost is already real &mdash; a full
-         agentic analysis runs to <strong>~1M+ tokens</strong>, tens to hundreds of dollars per run at frontier
-         rates (numbers below).</p></div>
+         agentic analysis runs to <strong>~1M+ tokens</strong> <span class="text-muted">(illustrative)</span>,
+         tens to hundreds of dollars per run at frontier rates (numbers below).</p></div>
   </div>
   <div class="footnote">Agents already perform full HEP analyses end-to-end &mdash; Moreno et&nbsp;al., arXiv:2603.20179 &mdash; and that run kept stalling on usage rate-limits: access is already the binding constraint.</div>
   <aside class="notes">
@@ -793,34 +862,32 @@
   <p class="kicker">Deep-dive &middot; what a run costs</p>
   <h2>Per analysis: <span class="accent">tens to hundreds</span> of dollars</h2>
   <div class="content">
-    <p style="margin:0 0 4px;">Cost of <strong>one</strong> agentic analysis &asymp; <strong>1M input + 1M output tokens</strong> (code-gen is roughly 1:1) &mdash; a <em>floor</em>, not a conservative estimate.</p>
-    <div style="display:grid; grid-template-columns: 210px 1fr; gap:4px 14px; align-items:center; font-size:12.5pt; margin-top:4px;">
-      <p style="margin:0; text-align:right;">GPT-5.x Pro</p>
-      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:560px; background:var(--maroon); border-radius:3px;"></span><strong>$210</strong></div>
-      <p style="margin:0; text-align:right;">o3-pro</p>
-      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:267px; background:var(--maroon); border-radius:3px;"></span><strong>$100</strong></div>
-      <p style="margin:0; text-align:right;">GPT-5.x</p>
-      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:93px; background:var(--maroon); border-radius:3px;"></span><strong>$35</strong></div>
-      <p style="margin:0; text-align:right;">Claude Opus 4.8</p>
-      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:80px; background:var(--maroon); border-radius:3px;"></span><strong>$30</strong></div>
-      <p style="margin:0; text-align:right;">Claude Sonnet 4.6</p>
-      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:48px; background:var(--teal); border-radius:3px;"></span><strong>$18</strong></div>
-      <p style="margin:0; text-align:right;">Qwen3.5 <span class="text-muted" style="font-size:10.5pt;">(open weight)</span></p>
-      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:21px; background:var(--teal); border-radius:3px;"></span><strong>$8</strong></div>
-      <p style="margin:0; text-align:right;">Claude Haiku</p>
-      <div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-block; height:15px; width:16px; background:var(--teal); border-radius:3px;"></span><strong>$6</strong></div>
+    <div class="callout" style="margin:0 0 14px;">
+      <p style="font-size:12.5pt;"><strong>My illustrative floor</strong>, not from the paper: one agentic
+         analysis &asymp; ~1M input + 1M output tokens (code-gen &asymp; 1:1) at list prices. A real analysis
+         can run much higher. Moreno et&nbsp;al. report only a subscription tier + wall-clock, not a per-run
+         token cost.</p></div>
+    <div style="display:grid; grid-template-columns: 290px 1fr; gap:12px 14px; align-items:center; font-size:13.5pt;">
+      <p style="margin:0; text-align:right;">Frontier <span class="text-muted" style="font-size:11pt;">(hosted)</span></p>
+      <div style="display:flex; align-items:center; gap:10px;"><span style="display:inline-block; height:18px; width:560px; background:var(--maroon); border-radius:3px;"></span><strong>$100&ndash;200+</strong></div>
+      <p style="margin:0; text-align:right;">Mid-tier <span class="text-muted" style="font-size:11pt;">(hosted)</span></p>
+      <div style="display:flex; align-items:center; gap:10px;"><span style="display:inline-block; height:18px; width:95px; background:var(--maroon); border-radius:3px;"></span><strong>$15&ndash;35</strong></div>
+      <p style="margin:0; text-align:right;">Open-weight <span class="text-muted" style="font-size:11pt;">(self-hosted)</span></p>
+      <div style="display:flex; align-items:center; gap:10px;"><span style="display:inline-block; height:18px; width:14px; background:var(--teal); border-radius:3px;"></span><strong>GPU time only</strong></div>
     </div>
-    <div class="callout teal" style="margin-top:10px;">
+    <div class="callout teal" style="margin-top:16px;">
       <p>Self-hosting <strong>open weights</strong> on facility GPUs collapses the per-run cost to ~GPU time &mdash;
          the equity lever. A credit-card-per-student model does the opposite, between groups and between countries.</p></div>
   </div>
-  <div class="footnote">Per-Mtok list prices, ballpark (input&nbsp;+&nbsp;output); 1M&nbsp;+&nbsp;1M illustrative. Agents already run analyses end-to-end: Moreno et&nbsp;al., arXiv:2603.20179.</div>
+  <div class="footnote">Tiers from per-Mtok list prices (input&nbsp;+&nbsp;output), ballpark; the 1M&nbsp;+&nbsp;1M budget is illustrative. Agents already run analyses end-to-end: Moreno et&nbsp;al., arXiv:2603.20179.</div>
   <aside class="notes">
-    BACKUP (down-arrow from equity). The bars are $/run for 1M-in + 1M-out at list prices: GPT-5.x Pro $210,
-    o3-pro $100, GPT-5.x $35, Opus 4.8 $30, Sonnet 4.6 $18, Qwen3.5 (open) $8, Haiku $6. Two honest caveats
-    to say aloud: (1) 1M+1M is MY floor estimate, not from a paper; a real analysis can be much more.
-    (2) open-weight API prices shown for comparison — the real win is self-hosting on facility GPUs, where
-    marginal cost is GPU time, not per-token. That is exactly why equitable inference is a facility decision.
+    BACKUP (down-arrow from equity). Bars are $/run for the ~1M-in + 1M-out floor, abstracted to three tiers
+    (frontier-hosted $100-200+, mid-hosted $15-35, open-weight self-hosted = GPU time only) so it's
+    defensible and not a vendor chart — current frontier names land in those buckets (e.g. GPT-5.x Pro and
+    o3-pro frontier; Opus/Sonnet/GPT-5.x mid; Qwen/Haiku-class cheap/open). Two honest caveats to say aloud:
+    (1) 1M+1M is MY floor estimate, not from the Moreno paper; a real analysis can be much more. (2) the real
+    win is self-hosting open weights on facility GPUs, where marginal cost is GPU time, not per-token. That is
+    exactly why equitable inference is a facility decision.
   </aside>
 </section>
 </section>
@@ -923,6 +990,9 @@
     Detail in research.md §ESCAPE. Key honest facts: ESCAPE = ESFRI cluster (H2020 GA 824064), now an
     "Open Collaboration"; VRE stack overlaps EXACTLY with Giordon's (Rucio/REANA/k8s/Flux). rucio-mcp
     serving 'escape' is the concrete hook — lead with it, it's real.
+    ASTROPARTICLE FRAMING (say it): "ESCAPE isn't a side-note for this room — it's exactly where Nikhef's
+    astroparticle breadth and the LHC computing model already meet, and where my agentic layer already has
+    a foot in the door via the live escape Rucio-MCP site."
     DELIBERATELY kept at partner-level: say ESCAPE is a platform "Nikhef helps build" and lead with the
     live escape Rucio-MCP site as the concrete hook. Do NOT claim a specific Nikhef work-package/role in
     front of people who'd know the details. If asked, defer honestly ("I'd want to learn the specifics").
@@ -1004,7 +1074,7 @@
       <div class="card"><h3 style="font-size:15pt;"><i class="fa-solid fa-coins"></i> Who pays for inference?</h3>
         <p style="font-size:12pt;">Hosted frontier vs self-hosted open weights on facility GPUs; equity as policy.</p></div>
       <div class="card teal"><h3 style="font-size:15pt;"><i class="fa-solid fa-globe"></i> Across sciences</h3>
-        <p style="font-size:12pt;">A commons across AFs, experiments, and ESCAPE — where&rsquo;s the facility/experiment line?</p></div>
+        <p style="font-size:12pt;">A commons spanning AFs, LHC experiments, and astroparticle (KM3NeT, Virgo, XENON) via ESCAPE — where&rsquo;s the facility/experiment line?</p></div>
     </div>
     <p class="text-center" style="margin-top:14px; font-size:15pt;"><strong>My bet:</strong> the model and harness are the easy part. <span class="text-maroon"><strong>Context, identity, trust, and equity</strong></span> are the facility&rsquo;s homework.</p>
   </div>
@@ -1015,24 +1085,66 @@
   </aside>
 </section>
 
+<section>
 <section id="first-90-days">
   <!-- the concrete "what I'd do here" close -->
   <p class="kicker">If I joined</p>
   <h2>What I&rsquo;d build <span class="accent">first</span></h2>
   <div class="content">
     <ul>
-      <li><strong>A credential-brokered MCP gateway</strong> in front of a Nikhef PDP&nbsp;/&nbsp;Tier-1 service &mdash; Nikhef&rsquo;s own identity and audit at the boundary.</li>
-      <li><strong>pixi-native, network-free batch environments</strong> as a facility default &mdash; reproducible whether or not an agent wrote the code.</li>
-      <li><strong>The agentic layer on the ESCAPE VRE</strong> as a multi-science pilot &mdash; built once, ported to astroparticle.</li>
+      <li><strong>A credential-brokered MCP gateway</strong> in front of a Nikhef PDP&nbsp;/&nbsp;Tier-1 service &mdash; Nikhef&rsquo;s own identity and audit at the boundary. <span class="text-muted">[[FILL: funding route / which PDP service / collaborator]]</span></li>
+      <li><strong>pixi-native, network-free batch environments</strong> as a facility default &mdash; reproducible whether or not an agent wrote the code. <span class="text-muted">[[FILL: tie to a Tier-1 ops line / EU call]]</span></li>
+      <li><strong>The agentic layer on the ESCAPE VRE</strong> as a multi-science pilot &mdash; built once, ported to astroparticle. <span class="text-muted">[[FILL: ESCAPE/Horizon vehicle]]</span></li>
     </ul>
     <div class="callout teal" style="margin-top:10px;">
       <p>Concrete, fundable, and aligned with PDP&rsquo;s remit and the new AI/ML group &mdash; built to port, not to silo.</p></div>
   </div>
   <aside class="notes">
     THE interview-closing slide. Vision-first lands here as 3 concrete, ownable deliverables, drawn straight
-    from the agenda: the credential-brokered gateway (§3a), pixi-native batch (§3e), and the ESCAPE VRE pilot
-    (§4). Land each as "here's what Nikhef gets," then stop and open the floor. Keep it to 3 — resist adding more.
+    from the agenda: the credential-brokered gateway, pixi-native batch, and the ESCAPE VRE pilot. Land each
+    as "here's what Nikhef gets," tie each to a funding route aloud, then stop and open the floor. Keep the
+    visible list to 3. The funding/leadership backup (down-arrow) is there if the committee probes "can you
+    bring in money and lead a program?".
   </aside>
+</section>
+
+<section id="leadership-funding">
+  <!-- BACKUP -->
+  <p class="kicker">Backup &middot; track record &amp; strategy</p>
+  <h2>Funding, projects, and people</h2>
+  <div class="content">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div class="card">
+        <h3>Track record</h3>
+        <p style="font-size:12.5pt;">Built and sustained community tooling (pyhf, pyhs3) and analysis
+           infrastructure under [[FILL: which NSF/DOE awards — names/role]]; contribute to USATLAS
+           Operations (DOE) and IRIS-HEP (NSF); HEP-SPIn (DOE-proposed); a pending DOE proposal for
+           agentic AI; institutional partner in the BMBF-funded DEMOS project (currently unfunded,
+           pursuing funded participation).</p>
+      </div>
+      <div class="card teal">
+        <h3>What I&rsquo;d pursue at Nikhef</h3>
+        <p style="font-size:12.5pt;">[[FILL: target calls — NWO / Horizon Europe / EuroHPC?]] for
+           AI-in-science infrastructure, building on ESCAPE&rsquo;s Horizon lineage; co-PI with PDP and the
+           new AI/ML group. I supervise across hardware, software, and physics today and would grow a
+           group here.</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:12px;">
+      <p>I&rsquo;ve coordinated multi-institution efforts &mdash; the ATLAS SUSY combination across ~14
+         analyses and a dozen teams, and the skills/marketplace commons. The program-leadership muscle,
+         not just the code.</p></div>
+  </div>
+  <aside class="notes">
+    Purpose: answer "can this person bring in money and lead a program?" Pull up if the committee probes
+    funding/leadership, or fold one line into the spoken close. The SUSY-combination coordination (14
+    analyses, ~5 years, a dozen teams) is your strongest concrete leadership proof — say it aloud even if
+    the slide stays in backup. DEMOS framing must stay honest: institutional partner, currently UNFUNDED,
+    pursuing funded participation — do not imply it funds you.
+    [[FILL: real award names/agencies/your role (PI/co-PI/senior personnel); EU funding targets. Do NOT
+    fabricate — if unknown, leave the markers and ask.]]
+  </aside>
+</section>
 </section>
 
 <!-- ============================================================ -->
