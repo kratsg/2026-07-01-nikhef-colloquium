@@ -92,8 +92,11 @@
   line-height: 1.45;
 }
 
-.reveal a { color: var(--teal); text-decoration: none; }
-.reveal a:hover { text-decoration: underline; }
+/* Underlined by default -- .reveal code is also teal, so an unstyled link is
+   visually indistinguishable from styled-but-inert code text. The underline is
+   the only reliable "this is clickable" signal at a glance or projected on a screen. */
+.reveal a { color: var(--teal); text-decoration: underline; text-decoration-color: rgba(31,111,120,0.45); text-decoration-thickness: 1px; }
+.reveal a:hover { text-decoration-color: currentColor; }
 
 /* ===========================================
    LISTS
@@ -479,3 +482,41 @@
   text-decoration: none;
 }
 .build-stamp a:hover { opacity: 1; }
+
+/* ===========================================
+   THEME LEAD-IN (§3 sub-section openers: theme-trust/ops/commons)
+   Not a title slide, not a full divider — large text, no boxes,
+   vertically + horizontally centered on the normal page background.
+   =========================================== */
+.theme-lead {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.theme-lead .theme-num {
+  font-family: var(--display-font);
+  font-size: 15pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin: 0 0 10px;
+}
+.theme-lead h2 {
+  font-size: 42pt;
+  margin: 0;
+  max-width: 900px;
+}
+.theme-lead .theme-thesis {
+  font-size: 17pt;
+  max-width: 760px;
+  margin-top: 24px;
+  color: var(--text-color);
+}
+.theme-lead .theme-covers {
+  font-size: 12.5pt;
+  color: var(--muted-color);
+  margin-top: 20px;
+}
