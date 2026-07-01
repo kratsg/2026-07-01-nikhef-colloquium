@@ -548,7 +548,7 @@
          is the backdrop. Current standards are moving toward <strong>stateless client metadata</strong>
          (a client&rsquo;s identity is a URL the server fetches) rather than a stateful registration database.
          This sits <em>on top of</em> the community&rsquo;s federated-identity work &mdash; WLCG token profiles,
-         the AARC blueprint, IAM &mdash; not instead of it.</p></div>
+         the <a href="https://aarc-community.org/">AARC</a> blueprint, IAM &mdash; not instead of it.</p></div>
   </div>
   <aside class="notes">
     SIMPLIFIED main line (moved DCR/CIMD jargon to the two backups) — for a mixed colloquium room, the
@@ -785,25 +785,31 @@ GET  /oauth/authorize?response_type=code
   <p class="kicker">Agenda &middot; earned autonomy</p>
   <h2>A trust ladder, with <span class="accent">promotion gates</span></h2>
   <div class="content">
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; align-items:stretch;">
-      <div class="card"><h3 style="font-size:14pt;">Observe</h3><p style="font-size:11.5pt;">read-only diagnostics (the HTCondor monitor)</p></div>
-      <div class="card teal"><h3 style="font-size:14pt;">Suggest</h3><p style="font-size:11.5pt;">drafts a fix; human approves</p></div>
-      <div class="card"><h3 style="font-size:14pt;">Act (scoped)</h3><p style="font-size:11.5pt;">restart a stuck transformer / worker</p></div>
-      <div class="card teal"><h3 style="font-size:14pt;">Recover</h3><p style="font-size:11.5pt;">remediate Ceph, deploy services</p></div>
+    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px; align-items:stretch;">
+      <div class="card"><h3 style="font-size:13pt;">Observe</h3><p style="font-size:11pt;">read-only diagnostics (the HTCondor monitor)</p></div>
+      <div class="card teal"><h3 style="font-size:13pt;">Suggest</h3><p style="font-size:11pt;">drafts a fix; a human approves</p></div>
+      <div class="card"><h3 style="font-size:13pt;">Submit job</h3><p style="font-size:11pt;">acts, scoped and reversible</p></div>
+      <div class="card teal"><h3 style="font-size:13pt;">Restart service</h3><p style="font-size:11pt;">bounces a stuck transformer / worker</p></div>
+      <div class="card"><h3 style="font-size:13pt;">Operate production</h3><p style="font-size:11pt;">remediates Ceph, deploys services</p></div>
     </div>
     <div class="callout" style="margin-top:12px;">
       <p>How does an agent <em>earn</em> the next rung? An <strong>evaluation harness</strong>: curated fault
          scenarios in a staging facility, scored, regression-tested when the model changes. The eval
-         <em>is</em> the promotion gate &mdash; autonomy is measured, not assumed.</p></div>
+         <em>is</em> the promotion gate &mdash; autonomy is measured, not assumed. This is my most distinctive
+         research contribution &mdash; and a concrete research agenda for Nikhef, not just an engineering task.</p></div>
   </div>
   <aside class="notes">
     From the IRIS-HEP/OSG-LHC doc: Concept 1 (trust ladder: read-only diagnostics → privileged ops →
     autonomous recovery → eventually "automated construction of entire analysis facilities") + Concept 11
     (facility-ops eval harness: injected faults, scored outcomes, community leaderboard, regression test
     on model change). research.md §OSG-LHC concepts 1 & 11.
+    SHARPENED to concrete ops verbs (Observe -> Suggest -> Submit job -> Restart service -> Operate
+    production) per review feedback — this is possibly the favorite slide in the deck and the clearest
+    evidence of a research program, not a platform demo; give it real time.
     NIKHEF ANGLE: this is the governance answer to "what may an agent do?" — quantified reliability that
     a Tier-1 operations team will care about, and it advances the "From Data to Discovery" grand-challenge
-    goals (downtime, expert-effort, time-to-insight).
+    goals (downtime, expert-effort, time-to-insight). This IS the eval/safety-harness bullet from
+    first-90-days — callback to it explicitly.
   </aside>
 </section>
 </section>
@@ -1146,9 +1152,11 @@ GET  /oauth/authorize?response_type=code
       <div class="card"><h3 style="font-size:14pt;">Standardize</h3><p style="font-size:11.5pt;">a conformant facility-MCP interface, WLCG-style</p></div>
     </div>
     <div class="callout teal" style="margin-top:12px;">
-      <p>A shared <strong>commons</strong> across US and European facilities &mdash; Nikhef as a Tier-1 node
-         contributing the European perspective, not re-inventing it.</p></div>
+      <p>A shared <strong>commons</strong> across US and European facilities &mdash; Nikhef, together with
+         <strong>SURF</strong> on the Dutch national e-infrastructure and Tier-1, contributing the European
+         perspective, not re-inventing it.</p></div>
   </div>
+  <div class="footnote"><a href="https://aarc-community.org/">AARC</a> &middot; <a href="https://eosc.eu/">EOSC</a> &middot; <a href="https://www.surf.nl/">SURF</a> &middot; <a href="https://projectescape.eu/">ESCAPE</a>.</div>
   <aside class="notes">
     NOW BUILT from the full IRIS-HEP/OSG-LHC doc (v2.1) Giordon supplied. Three pillars chosen for a broad
     room: Operate (Concepts 3,5), Authorize (Concept 4 — RFC 8693 token exchange), Standardize (Concept 8
@@ -1156,8 +1164,11 @@ GET  /oauth/authorize?response_type=code
     across heterogeneous infrastructure"). The full 11-concept program lives in research.md §OSG-LHC if asked
     (the bare-number backup slide was dropped as too cryptic to read cold).
     NIKHEF ANGLE: Nikhef hosts the Dutch LHC Tier-1 and runs federated e-infra — "upstream services" is
-    precisely the PDP remit. The conformant-MCP-interface idea (Concept 8) is the WLCG-style standardization
-    pitch that should resonate with Simone Campana.
+    precisely the PDP remit. Named SURF explicitly (aarc-community.org / eosc.eu / surf.nl / projectescape.eu
+    are the four Europe-specific orgs worth having ready) — SURF runs the Dutch national e-infrastructure
+    WITH Nikhef, so naming it signals homework done on their actual infrastructure, not Europe generically.
+    The conformant-MCP-interface idea (Concept 8) is the WLCG-style standardization pitch that should
+    resonate with Simone Campana.
   </aside>
 </section>
 
