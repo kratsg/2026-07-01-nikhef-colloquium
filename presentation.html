@@ -694,60 +694,89 @@ GET  /oauth/authorize?response_type=code
   <p class="kicker">Agenda &middot; what may an agent do?</p>
   <h2>Sandboxing on (and off) <span class="accent">Kubernetes</span></h2>
   <div class="content">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-      <div class="card"><h3><i class="fa-brands fa-docker"></i> On k8s</h3>
-        <p>Agent tool-execution in throwaway pods: resource caps, network policy, no host access. The facility&rsquo;s default isolation.</p></div>
-      <div class="card teal"><h3><i class="fa-solid fa-cube"></i> Off k8s</h3>
-        <p><strong>bubblewrap</strong> (the sandbox behind Flatpak) or <strong>sydbox</strong>: fence a process from files/network/hardware unless granted. Lightweight isolation on bare login nodes (cf. &ldquo;blaude&rdquo;, a bubblewrapped Claude).</p></div>
+    <div style="display:grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap:10px; align-items:center; margin:10px 0;">
+      <div class="node fill" style="font-size:13.5pt;">Pods<span class="sub">k8s default: caps, no host access</span></div>
+      <i class="fa-solid fa-arrow-right text-maroon"></i>
+      <div class="node fill" style="font-size:13.5pt;">Sandbox<span class="sub">off k8s: bubblewrap, sydbox</span></div>
+      <i class="fa-solid fa-arrow-right text-maroon"></i>
+      <div class="node teal" style="font-size:13.5pt;">Policy<span class="sub">eBPF-class, fine-grained</span></div>
+      <i class="fa-solid fa-arrow-right text-maroon"></i>
+      <div class="node teal" style="font-size:13.5pt;">Privilege<span class="sub">earned, human-gated</span></div>
     </div>
-    <div class="callout" style="margin-top:12px;">
+    <div class="callout" style="margin-top:8px;">
       <p class="label"><i class="fa-solid fa-triangle-exclamation"></i> The honest gap</p>
       <p>Today a harness can <em>advise</em> (managed <code>CLAUDE.md</code>, allow-lists) but can&rsquo;t reliably
          <strong>hard-deny</strong> a command at the user level. Real blocking needs a privileged
-         <strong>policy engine</strong> on the node, or a sandbox. The instructions help; they are not
-         enforcement &mdash; as a fellow facility sysadmin put it, an agent just lets users 100&times; the
-         bad behaviour we&rsquo;ve had for decades.</p></div>
-    <p class="text-muted" style="font-size:12.5pt; margin-top:8px;">Graded trust: human-in-the-loop gates for write/submit/email; privileged vs user-space lanes for ops agents.</p>
+         <strong>policy engine</strong> on the node, or a sandbox &mdash; as a fellow facility sysadmin put it,
+         an agent just lets users 100&times; the bad behaviour we&rsquo;ve had for decades.</p></div>
   </div>
   <aside class="notes">
-    ENRICHED from the OSG-Consortium Slack thread (Giordon × Lincoln Bryant × Greg Thain). Honest framing:
-    a system-wide /etc/claude-code/CLAUDE.md + permission allow/deny is stronger than "notes" but is NOT
-    kernel-level enforcement; cf. claude-code issue #70184 (can't reliably deny commands at user level).
+    SIMPLIFIED to a visual flow per review feedback — the paragraph-heavy version buried the shape. Say each
+    step out loud: pods are the k8s default (resource caps, network policy, no host access); off k8s,
+    bubblewrap (the Flatpak sandbox — <a href="https://github.com/containers/bubblewrap">containers/bubblewrap</a>,
+    cf. <a href="https://flatpak.org/">flatpak.org</a>) or sydbox fence files/network/hardware on bare login
+    nodes (cf. "blaude", a bubblewrapped Claude — <a href="https://github.com/c0ffee0wl/blaude">c0ffee0wl/blaude</a>);
+    policy is the fine-grained eBPF-class layer (next backup); privilege is the trust ladder (next slide) —
+    this flow previews it. ENRICHED from the OSG-Consortium Slack thread (Giordon × Lincoln Bryant × Greg
+    Thain). A system-wide /etc/claude-code/CLAUDE.md + permission allow/deny is stronger than "notes" but is
+    NOT kernel-level enforcement; cf. claude-code issue #70184 (can't reliably deny commands at user level).
     Lincoln's line: "Claude lets users 100x the same bad behaviour we've had for 30 years" — good honest
-    laugh beat. bubblewrap / sydbox / blaude as user-space sandboxes; k8s pods as the default. Detail in
-    research.md §sandboxing. Deep-dive on policy engines (eBPF) is the next backup slide.
-    NIKHEF ANGLE: a Tier-1 with mixed bare-metal can't rely on k8s isolation everywhere.
-    HONEST NEAR-MISS (tell live, don't put on the slide): our held-job email agent hit a race condition
-    once — two agents grabbed the same approval and it nearly double-sent — so we stood email-sending
-    down until it was fixed. The point: human-in-the-loop gates caught it, and we'd rather be honest
-    than pretend it's flawless. Good "we prefer honest over flawless" beat right after the enforcement-gap
-    callout.
+    laugh beat, attribute lightly if asked. NIKHEF ANGLE: a Tier-1 with mixed bare-metal can't rely on k8s
+    isolation everywhere. HONEST NEAR-MISS (tell live, don't put on the slide): our held-job email agent hit
+    a race condition once — two agents grabbed the same approval and it nearly double-sent — so we stood
+    email-sending down until it was fixed. Human-in-the-loop gates caught it; "honest over flawless."
   </aside>
 </section>
 
 <section id="agenda-sandbox-policy">
-  <!-- DEEP-DIVE / BACKUP : policy engines, eBPF vs cgroups -->
+  <!-- DEEP-DIVE / BACKUP : policy engines, eBPF hooks, observability -->
   <p class="kicker">Deep-dive &middot; how do you actually enforce it?</p>
   <h2>Pods, cgroups, and <span class="accent">eBPF</span></h2>
   <div class="content">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-      <div class="card"><h3>Coarse: containers / cgroups</h3>
-        <p style="font-size:12.5pt;">Pods give resource isolation (CPU/mem/io via cgroups), bind-mounts to hide paths, seccomp to drop syscalls. Blunt but simple.</p></div>
-      <div class="card teal"><h3>Fine: eBPF</h3>
-        <p style="font-size:12.5pt;">Attach to tracepoints / LSM hooks; inspect &mdash; and now, via BPF-LSM, partly mutate &mdash; syscalls and file opens. Tetragon, Falco, bpflock. Powerful, complex.</p></div>
+    <div style="display:grid; grid-template-columns: 1fr 1.3fr; gap:20px; align-items:start;">
+      <div>
+        <div class="card" style="margin-bottom:10px;"><h3 style="font-size:14.5pt;">Coarse: containers / cgroups</h3>
+          <p style="font-size:12pt;">Resource isolation (CPU/mem/io), bind-mounts to hide paths, seccomp to drop syscalls. Blunt but simple.</p></div>
+        <div class="card teal"><h3 style="font-size:14.5pt;">Fine: eBPF</h3>
+          <p style="font-size:12pt;">Sandboxed kernel programs attached to a hook point &mdash; a syscall, a kernel tracepoint, a kprobe/uprobe almost anywhere. Tetragon, Falco, bpflock.</p></div>
+      </div>
+      <div style="text-align:center;">
+        <svg viewBox="0 0 380 260" style="max-width:100%; max-height:240px;">
+          <rect x="10" y="10" width="360" height="60" rx="8" fill="#2D3748"/>
+          <text x="190" y="35" text-anchor="middle" fill="#fff" font-size="14" font-weight="600" font-family="Inter,Helvetica,sans-serif">User-space process</text>
+          <text x="190" y="55" text-anchor="middle" fill="#CBD2DC" font-size="11" font-family="Inter,Helvetica,sans-serif">agent, shell, tool call</text>
+          <line x1="190" y1="70" x2="190" y2="96" stroke="#5C0000" stroke-width="2"/>
+          <text x="205" y="86" fill="#6B6B6B" font-size="10" font-family="Inter,Helvetica,sans-serif" font-style="italic">syscall / tracepoint</text>
+          <rect x="30" y="98" width="320" height="46" rx="8" fill="#800000"/>
+          <text x="190" y="126" text-anchor="middle" fill="#fff" font-size="13" font-weight="600" font-family="Inter,Helvetica,sans-serif">Hook point (kernel)</text>
+          <line x1="190" y1="144" x2="190" y2="168" stroke="#5C0000" stroke-width="2"/>
+          <rect x="55" y="170" width="270" height="80" rx="10" fill="#e4f0f1" stroke="#1F6F78" stroke-width="2"/>
+          <text x="190" y="194" text-anchor="middle" fill="#1A1A1A" font-size="12.5" font-weight="700" font-family="Inter,Helvetica,sans-serif">eBPF program</text>
+          <text x="190" y="212" text-anchor="middle" fill="#1A1A1A" font-size="10.5" font-family="Inter,Helvetica,sans-serif">verified, sandboxed, JIT-compiled</text>
+          <text x="190" y="230" text-anchor="middle" fill="#1A1A1A" font-size="10.5" font-family="Inter,Helvetica,sans-serif">inspect &rarr; log / alert / (BPF-LSM) act</text>
+        </svg>
+      </div>
     </div>
-    <div class="callout" style="margin-top:12px;">
+    <div class="callout" style="margin-top:10px;">
       <p>cgroups/pods and eBPF are <strong>orthogonal</strong>: resource isolation vs fine-grained
          syscall/file policy. An agent may need both &mdash; a pod for blast-radius, a policy engine for
          &ldquo;don&rsquo;t <code>find /</code> the shared filesystem.&rdquo;</p></div>
   </div>
+  <div class="footnote">eBPF: <a href="https://ebpf.io/what-is-ebpf/">ebpf.io/what-is-ebpf</a> &middot; agent-focused eBPF observability: <a href="https://github.com/eunomia-bpf/agentsight">agentsight</a>.</div>
   <aside class="notes">
-    BACKUP for the sysadmin/security crowd (Campana likely probes here). From Greg Thain (HTCondor):
-    eBPF was historically read-only; BPF-LSM now allows some mutation of kernel state / syscall results
-    (already replaced k8s networking proxy sidecars with in-kernel control; LSM hooks for fine-grained
-    policy). Lincoln Bryant: cgroups = resource isolation, eBPF = attach to kernel funcs/data. Greg's
-    HTC'24 eBPF talk is the reference. Tools: Tetragon, Falco, bpflock; sydbox
-    (gitlab.exherbo.org/sydbox/sydbox); bubblewrap. research.md §sandboxing has full notes.
+    BACKUP for the sysadmin/security crowd (Campana likely probes here). Diagram redrawn from ebpf.io's own
+    hook-point explanation: "eBPF programs are event-driven and run when the kernel or an application passes
+    a certain hook point. Pre-defined hooks include system calls, function entry/exit, kernel tracepoints,
+    network events; if none exists, attach a kprobe/uprobe almost anywhere." From Greg Thain (HTCondor):
+    eBPF was historically read-only; BPF-LSM now allows some mutation of kernel state/syscall results
+    (already replaced k8s networking-proxy sidecars with in-kernel control). Lincoln Bryant: cgroups =
+    resource isolation, eBPF = attach to kernel funcs/data. Greg's HTC'24 eBPF talk is the reference. Tools:
+    Tetragon, Falco, bpflock; sydbox (gitlab.exherbo.org/sydbox/sydbox); bubblewrap.
+    NEW: agentsight (eunomia-bpf) is a perf/top/strace-like tool FOR AI AGENTS specifically — eBPF probes
+    watch an agent's process tree, file ops, network destinations, and (via TLS tracing at the syscall
+    boundary) even the plaintext LLM request/response, all without modifying the agent. That's the connective
+    tissue between "eBPF as a concept" and "eBPF as how you'd actually observe what an agent did on this
+    facility" — a real answer to "can you audit what the agent touched?" research.md §sandboxing has more.
   </aside>
 </section>
 
