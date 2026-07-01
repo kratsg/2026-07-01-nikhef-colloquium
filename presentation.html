@@ -201,31 +201,28 @@
   <p class="kicker">Existence proof &middot; what I operate</p>
   <h2>This runs in <span class="accent">production</span>, not a demo</h2>
   <div class="content">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
-      <div class="card">
-        <h3><i class="fa-solid fa-server"></i> The facility I run</h3>
-        <p>A heterogeneous <strong>Kubernetes</strong> cluster &mdash; GPU nodes, mixed storage &mdash;
-           for USATLAS Operations, serving <strong>~800 users</strong>. Dask Gateway for distributed
-           compute; automated benchmarking with real analysis workflows.</p>
-      </div>
-      <div class="card teal">
-        <h3><i class="fa-solid fa-microchip"></i> Already an AI/ML platform</h3>
-        <p><strong>Triton Inference-as-a-Service</strong> for ML model serving; a <strong>REANA</strong>
-           cluster for preserved, reusable workflows. The agentic layer sits on top of infrastructure
-           I <em>already operate</em>.</p>
-      </div>
+    <p class="text-lg">A Kubernetes-based analysis facility for <strong>USATLAS Operations</strong> &mdash; I run it, hands-on.</p>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px; text-align:center; margin:14px 0 4px;">
+      <div><p style="font-size:30pt; font-weight:700; color:var(--maroon); margin:0; line-height:1.1;">~800</p><p class="text-muted" style="margin:2px 0 0;">physics users</p></div>
+      <div><p style="font-size:30pt; font-weight:700; color:var(--maroon); margin:0; line-height:1.1;">2,800</p><p class="text-muted" style="margin:2px 0 0;">HTCondor cores</p></div>
+      <div><p style="font-size:30pt; font-weight:700; color:var(--maroon); margin:0; line-height:1.1;">9 PB</p><p class="text-muted" style="margin:2px 0 0;">Ceph storage</p></div>
+      <div><p style="font-size:26pt; font-weight:700; color:var(--teal); margin:0; line-height:1.15;">Triton</p><p class="text-muted" style="margin:2px 0 0;">inference-as-a-service</p></div>
     </div>
-    <div class="callout teal" style="margin-top:14px;">
-      <p>Everything that follows is built on a working data-processing facility &mdash; this is
-         <strong>systems engineering I do hands-on</strong>, not a slide-deck vision.</p></div>
+    <p class="text-muted" style="font-size:12pt; margin:8px 0 0;"><strong>Compute:</strong> 1520-core long queue (7&nbsp;days) + 1280-core short queue (4&nbsp;h, spills over), hyperconverged; 4 SSH + 4 Jupyter nodes; Dask&nbsp;Gateway.
+       <strong>Storage:</strong> /home NFS 19&nbsp;TB (100&nbsp;GB/user) &middot; /data + /cold Ceph 4.5&nbsp;PB each (/data 5&nbsp;TB/user, not backed up).</p>
+    <div class="callout teal" style="margin-top:12px;">
+      <p>Triton IaaS + a <strong>REANA</strong> workflow cluster already make this an <strong>AI/ML platform</strong>.
+         The agentic layer sits on infrastructure I operate &mdash; <strong>systems engineering I do hands-on</strong>, not a slide-deck vision.</p></div>
   </div>
   <aside class="notes">
     Purpose: establish operations + data-processing + ML-serving credibility BEFORE the agentic vision,
-    because the role is data-processing-infrastructure-first. Say out loud: "before I argue about where
-    AI is going, here's the infrastructure I run day to day." Triton IaaS = the literal "infrastructure
-    for AI/ML" in the job title; Dask Gateway + REANA + benchmarking = HTC / data-management / systems
-    operation. Keep it to ~45s; it's a credibility anchor, not a deep dive.
-    [[FILL: exact hardware if you want it — node/GPU count, storage size/PB. Don't invent; omit if unsure.]]
+    because the role is data-processing-infrastructure-first. Say out loud: "before I argue about where AI
+    is going, here's the infrastructure I run day to day." Real numbers: ~800 users; HTCondor 1520-core
+    long queue (7d) + 1280-core short queue (4h, spills into long), hyperconverged / software-sliced;
+    4 SSH + 4 Jupyter nodes; /home NFS 19TB (100GB/user), /data Ceph 4.5PB (5TB/user, NOT backed up),
+    /cold Ceph 4.5PB (no per-user quota, parks retired-user data before deletion). Triton IaaS = the literal
+    "infrastructure for AI/ML" in the job title; Dask Gateway + REANA + benchmarking = HTC / data-management /
+    systems operation. Keep it to ~45s; it's a credibility anchor, not a deep dive.
   </aside>
 </section>
 
@@ -470,7 +467,7 @@
        credentials</strong>; the broker authenticates the user, mints per-service credentials, and
        audits every tool call.</p>
     <div style="text-align:center; margin:10px 0;">
-      <img src="images/NEW-af-mcp-arch.svg" alt="LLM client to mcp.af.uchicago.edu front door (oauth2-proxy, Keycloak OIDC), through a FastMCP aggregator and credential broker doing identity, authZ, credential brokering and audit, fanning out to Rucio, PanDA, AMI, GitLab, Jupyter, HTCondor and an Nth backend" style="max-width:100%; max-height:330px;">
+      <img src="images/NEW-af-mcp-arch.svg" alt="Claude, Gemini or any MCP client to the mcp.af.uchicago.edu front door (oauth2-proxy, AF Keycloak OIDC), through a FastMCP aggregator and AF credential broker (FastAPI /v1) doing identity, authZ, credential brokering and audit, fanning out to rucio-mcp, ami-mcp, openmagic, panda-mcp, condor-mcp, gitlab-mcp, jupyter-control and an Nth backend with no code change" style="max-width:100%; max-height:330px;">
     </div>
     <div class="callout teal" style="margin-top:6px;">
       <p>This is the <strong>strategic boundary</strong>: identity, authZ, credential brokering, and audit
@@ -484,8 +481,9 @@
     and audit policy lives." Connect explicitly to PDP's 'trusted collaboration for open science'.
     DEEP-DIVE backup = the topology slide (next, down-arrow).
     Diagram is images/NEW-af-mcp-arch.svg: client (bearer token only) -> mcp.af.uchicago.edu
-    (oauth2-proxy -> Keycloak OIDC) -> FastMCP aggregator + credential broker (Identity / AuthZ /
-    Credential brokering / Audit) -> Rucio, PanDA, AMI, GitLab, Jupyter, HTCondor, Nth backend.
+    (oauth2-proxy -> AF Keycloak OIDC) -> FastMCP aggregator + AF credential broker (FastAPI /v1;
+    Identity / AuthZ / Credential brokering / Audit) -> rucio-mcp, ami-mcp, openmagic (theory/MC gen),
+    panda-mcp, condor-mcp, gitlab-mcp, jupyter-control, Nth backend (no code change).
     Say out loud: the broker is the ONLY thing that ever touches raw x509/IAM; the client just
     carries a short-lived bearer token. Deployed via Flux CD/Helm; portal at
     portal.af.uchicago.edu/tokens issues the bearer tokens. ~800 users behind the one endpoint.
@@ -901,9 +899,20 @@
     <ul>
       <li>Facilities (NERSC, UChicago, SLAC, BNL, AmSC, NRP&hellip;) are <strong>blocking web access for agents</strong> to defend against prompt injection from untrusted pages.</li>
       <li>So a skill can&rsquo;t just say &ldquo;go read the docs.&rdquo; It must encode <strong>just enough</strong> guidance &mdash; and delegate &ldquo;what&rsquo;s the latest?&rdquo; to a <strong>curated MCP</strong>, not the open internet.</li>
-      <li>Not <code>use /path/2024-egamma-recs.config</code> (stale fast). Instead: <em>&ldquo;ask the chATLAS MCP for the latest recommendation path, then configure.&rdquo;</em></li>
     </ul>
-    <div class="callout teal" style="margin-top:8px;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:12px; align-items:start;">
+      <div>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-xmark" style="color:var(--maroon);"></i> <strong>Stale-prone</strong></p>
+        <p style="margin:6px 0 0;"><code>use /path/2024-egamma-recs.config</code></p>
+        <p class="text-muted" style="font-size:12pt; margin:3px 0 0;">a hardcoded path, wrong within a season.</p>
+      </div>
+      <div>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-check" style="color:var(--teal);"></i> <strong>Durable</strong></p>
+        <p style="margin:6px 0 0;">&ldquo;ask the <strong>chATLAS MCP</strong> for the latest recommendation path, then configure.&rdquo;</p>
+        <p class="text-muted" style="font-size:12pt; margin:3px 0 0;">the MCP owns &ldquo;what&rsquo;s current.&rdquo;</p>
+      </div>
+    </div>
+    <div class="callout teal" style="margin-top:14px;">
       <p>The design rule: <strong>minimal durable guidance + a trusted live source</strong>. What an agent may
          reach is a <em>facility</em> decision, not a user convenience.</p></div>
   </div>
@@ -933,6 +942,7 @@
          side, an <strong>AI proto-collaboration</strong> (umbrella over IRIS-HEP and other funded projects + research
          groups, open to international collaborators) updates at <strong>DPF, July&nbsp;2026</strong>.</p></div>
   </div>
+  <div class="footnote">US AI proto-collaboration update: DPF 2026, indico.fnal.gov/event/72820/contributions/341339.</div>
   <aside class="notes">
     From the same AMG thread (Giordon, Zach Marshall, Gordon Watts, Tomas Dado, Giovanni). Points to draw
     on: single-source via marketplace.json/plugin.json — reference, don't duplicate (usatlas/marketplace#60);
@@ -1000,7 +1010,6 @@
   </aside>
 </section>
 
-<section>
 <section id="iris-osg">
   <!-- IRIS-HEP / OSG-LHC upstream services (built from the doc) -->
   <p class="kicker">&hellip;and upstream of every experiment</p>
@@ -1023,36 +1032,12 @@
     NOW BUILT from the full IRIS-HEP/OSG-LHC doc (v2.1) Giordon supplied. Three pillars chosen for a broad
     room: Operate (Concepts 3,5), Authorize (Concept 4 — RFC 8693 token exchange), Standardize (Concept 8
     — a conformant AF-MCP interface + conformance test suite, "mirrors how WLCG standardizes site interfaces
-    across heterogeneous infrastructure"). Full 11-concept map is the backup (down-arrow). research.md §OSG-LHC.
+    across heterogeneous infrastructure"). The full 11-concept program lives in research.md §OSG-LHC if asked
+    (the bare-number backup slide was dropped as too cryptic to read cold).
     NIKHEF ANGLE: Nikhef hosts the Dutch LHC Tier-1 and runs federated e-infra — "upstream services" is
     precisely the PDP remit. The conformant-MCP-interface idea (Concept 8) is the WLCG-style standardization
     pitch that should resonate with Simone Campana.
   </aside>
-</section>
-
-<section id="iris-osg-map">
-  <!-- BACKUP : the 11-concept framework -->
-  <p class="kicker">Backup &middot; the framework</p>
-  <h2>AI for facilities &amp; OSG-LHC: 11 concepts</h2>
-  <div class="content">
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px 18px; font-size:12.5pt;">
-      <p><strong>1</strong> Agent trust ladder</p><p><strong>2</strong> General &harr; facility knowledge</p>
-      <p><strong>3</strong> Operational AI on telemetry</p><p><strong>4</strong> Cross-domain authZ (RFC&nbsp;8693)</p>
-      <p><strong>5</strong> Accounting-record integrity</p><p><strong>6</strong> Split MCP-and-skills products</p>
-      <p><strong>7</strong> Credential broker for user agents</p><p><strong>8</strong> Standard AF-MCP interface</p>
-      <p><strong>9</strong> Query-aware predictive caching</p><p><strong>10</strong> AI above the scheduler</p>
-      <p><strong>11</strong> Facility-ops eval harness</p><p class="text-muted">&rarr; &ldquo;From Data to Discovery&rdquo;</p>
-    </div>
-    <p class="text-muted" style="font-size:12pt; margin-top:10px;">Most map onto slides you&rsquo;ve already seen: 6&rarr;architecture, 7/8&rarr;gateway, 4&rarr;equity &amp; identity, 1/11&rarr;trust ladder, 3/5/9/10&rarr;facility fabric.</p>
-  </div>
-  <aside class="notes">
-    BACKUP. The doc's organizing thesis: "moving AI from passive observation toward trustworthy, measured
-    autonomy," advancing the "From Data to Discovery" grand challenge (downtime, expert-effort,
-    time-to-insight). Pull up if asked "is there a structured program behind this?". Each concept is
-    summarised in research.md §OSG-LHC. Note this is IRIS-HEP brainstorming (v2.1) — frame as a program
-    direction, not a finished plan.
-  </aside>
-</section>
 </section>
 
 <!-- ============================================================ -->
@@ -1062,19 +1047,25 @@
   <p class="kicker">Let&rsquo;s decide together</p>
   <h2>The open questions</h2>
   <div class="content">
-    <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:12px;">
-      <div class="card"><h3 style="font-size:15pt;"><i class="fa-solid fa-sitemap"></i> Identity &amp; granularity</h3>
-        <p style="font-size:12pt;">One MCP per service or a gateway delegating identity? DCR or CIMD? Where does Nikhef&rsquo;s audit live?</p></div>
-      <div class="card teal"><h3 style="font-size:15pt;"><i class="fa-solid fa-map-location-dot"></i> Where does context live?</h3>
-        <p style="font-size:12pt;">Shipped with the facility, or a shared commons? Single-source vs forks; eval/lint for orthogonality; who keeps it true?</p></div>
-      <div class="card"><h3 style="font-size:15pt;"><i class="fa-solid fa-shield-halved"></i> What may an agent do?</h3>
-        <p style="font-size:12pt;">Human gates, k8s vs bubblewrap/eBPF isolation, a trust ladder with an eval-harness promotion gate.</p></div>
-      <div class="card teal"><h3 style="font-size:15pt;"><i class="fa-solid fa-box"></i> Portable environments</h3>
-        <p style="font-size:12pt;">pixi-native batch as the default? Supply-chain policy for conda-forge?</p></div>
-      <div class="card"><h3 style="font-size:15pt;"><i class="fa-solid fa-coins"></i> Who pays for inference?</h3>
-        <p style="font-size:12pt;">Hosted frontier vs self-hosted open weights on facility GPUs; equity as policy.</p></div>
-      <div class="card teal"><h3 style="font-size:15pt;"><i class="fa-solid fa-globe"></i> Across sciences</h3>
-        <p style="font-size:12pt;">A commons spanning AFs, LHC experiments, and astroparticle (KM3NeT, Virgo, XENON) via ESCAPE — where&rsquo;s the facility/experiment line?</p></div>
+    <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:22px 30px;">
+      <div style="border-left:3px solid var(--maroon); padding-left:13px;">
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-sitemap" style="color:var(--maroon);"></i> <strong>Identity &amp; granularity</strong></p>
+        <p style="font-size:12pt; margin:3px 0 0;">One MCP per service or a gateway delegating identity? DCR or CIMD? Where does Nikhef&rsquo;s audit live?</p></div>
+      <div style="border-left:3px solid var(--teal); padding-left:13px;">
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-map-location-dot" style="color:var(--teal);"></i> <strong>Where does context live?</strong></p>
+        <p style="font-size:12pt; margin:3px 0 0;">Shipped with the facility, or a shared commons? Single-source vs forks; eval/lint for orthogonality; who keeps it true?</p></div>
+      <div style="border-left:3px solid var(--maroon); padding-left:13px;">
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-shield-halved" style="color:var(--maroon);"></i> <strong>What may an agent do?</strong></p>
+        <p style="font-size:12pt; margin:3px 0 0;">Human gates, k8s vs bubblewrap/eBPF isolation, a trust ladder with an eval-harness promotion gate.</p></div>
+      <div style="border-left:3px solid var(--teal); padding-left:13px;">
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-box" style="color:var(--teal);"></i> <strong>Portable environments</strong></p>
+        <p style="font-size:12pt; margin:3px 0 0;">pixi-native batch as the default? Supply-chain policy for conda-forge?</p></div>
+      <div style="border-left:3px solid var(--maroon); padding-left:13px;">
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-coins" style="color:var(--maroon);"></i> <strong>Who pays for inference?</strong></p>
+        <p style="font-size:12pt; margin:3px 0 0;">Hosted frontier vs self-hosted open weights on facility GPUs; equity as policy.</p></div>
+      <div style="border-left:3px solid var(--teal); padding-left:13px;">
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-globe" style="color:var(--teal);"></i> <strong>Across sciences</strong></p>
+        <p style="font-size:12pt; margin:3px 0 0;">A commons spanning AFs, LHC experiments, and astroparticle (KM3NeT, Virgo, XENON) via ESCAPE &mdash; where&rsquo;s the facility/experiment line?</p></div>
     </div>
     <p class="text-center" style="margin-top:14px; font-size:15pt;"><strong>My bet:</strong> the model and harness are the easy part. <span class="text-maroon"><strong>Context, identity, trust, and equity</strong></span> are the facility&rsquo;s homework.</p>
   </div>
@@ -1170,12 +1161,21 @@
         </ul>
       </div>
     </div>
+    <div style="border-top:1px solid var(--line-color); margin-top:16px; padding-top:12px;">
+      <p style="margin:0; font-size:13.5pt;"><strong>In flight &amp; next:</strong>
+         <span class="text-muted">server-side CIMD trust policies &middot; more brokered MCP backends &middot; the trust-ladder eval harness &middot; pixi-native batch as a default</span></p>
+    </div>
   </div>
-  <div class="footnote">Giordon Stark &middot; kratsg &middot; Nikhef colloquium &middot; 2026&#8209;07&#8209;01. In the spirit of Gordon Watts&rsquo; CHEP&nbsp;2026 ecosystem framing.</div>
+  <div class="footnote">Giordon Stark &middot; kratsg &middot; Nikhef colloquium &middot; 2026&#8209;07&#8209;01.</div>
   <aside class="notes">
-    DECIDED: keep individual UChicago AF names OFF this slide (avoid a wall of names in a colloquium close);
-    credit the team collectively in speech instead — "genuinely a team effort at the UChicago AF." Keep the
-    close short; the discussion is the point of an interview colloquium.
+    Keep individual UChicago AF names OFF this slide (avoid a wall of names in a colloquium close); credit the
+    team collectively in speech instead — "genuinely a team effort at the UChicago AF." The "in flight & next"
+    strip fills the slide and signals ongoing work; [[FILL/confirm: swap in the items you'd actually call
+    in-development so you can speak to each honestly]]. Dropped the "in the spirit of Gordon Watts" line from
+    the footnote (the deck has moved well beyond that framing); Watts is still credited on the vocab backup.
+    Note: I filled the closing bareness with this in-development strip rather than re-drawing the AF-MCP
+    topology here (it's already the gateway slide); say the word if you'd rather repeat the diagram.
+    Keep the close short; the discussion is the point of an interview colloquium.
   </aside>
 </section>
 
