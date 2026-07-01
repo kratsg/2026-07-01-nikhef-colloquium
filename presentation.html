@@ -965,13 +965,13 @@ GET  /oauth/authorize?response_type=code
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
         <div>
           <div class="shot filled light" style="min-height:0;">
-            <img src="images/htcondor-daily-report-slack.png" style="max-height:230px; width:auto;" alt="Daily HTCondor cluster report posted to Slack by the AI monitor agent">
+            <img src="images/htcondor-daily-report-slack.png" style="max-height:400px; width:auto;" alt="Daily HTCondor cluster report posted to Slack by the AI monitor agent">
           </div>
           <p class="shot-hint" style="text-align:center; margin-top:3px; font-size:10.5pt;">Morning report &mdash; <strong>448 held of 14,671</strong> (3.1%)</p>
         </div>
         <div>
           <div class="shot filled light" style="min-height:0;">
-            <img src="images/htcondor-email-slack.png" style="max-height:230px; width:auto;" alt="Drafted held-job email posted to Slack, approved by a human, then sent by the agent">
+            <img src="images/htcondor-email-slack.png" style="max-height:400px; width:auto;" alt="Drafted held-job email posted to Slack, approved by a human, then sent by the agent">
           </div>
           <p class="shot-hint" style="text-align:center; margin-top:3px; font-size:10.5pt;">Drafted fix &rarr; human types &ldquo;approve&rdquo; &rarr; sent</p>
         </div>
@@ -1304,8 +1304,8 @@ GET  /oauth/authorize?response_type=code
   <p class="kicker">A bridge that already exists</p>
   <h2>The agentic layer, meet <span class="accent">ESCAPE</span></h2>
   <div class="content">
-    <div class="shot filled light" style="min-height:0; width:340px; margin:0 auto 12px;">
-      <img src="images/NEW-nikhef-hero.jpg" style="max-height:150px; width:auto;" alt="Nikhef + ESCAPE: multi-messenger astronomy by design and AI integration — Virgo gravitational waves, KM3NeT neutrinos, XENON dark matter, Auger cosmic rays, feeding an AI and data analysis center">
+    <div class="shot filled light" style="min-height:0; height:auto; flex-shrink:0; width:380px; margin:0 auto 10px;">
+      <img src="images/NEW-nikhef-hero.jpg" style="max-height:175px; width:auto;" alt="Nikhef + ESCAPE: multi-messenger astronomy by design and AI integration — Virgo gravitational waves, KM3NeT neutrinos, XENON dark matter, Auger cosmic rays, feeding an AI and data analysis center">
     </div>
     <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:22px;">
       <div>
@@ -1395,8 +1395,8 @@ oidc_audience = rucio</code></pre>
         <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-map-location-dot" style="color:var(--teal);"></i> <strong>How do we share context between facilities?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">Shipped with the facility, or a shared commons? Single-source vs forks; eval/lint for orthogonality; who keeps it true?</p></div>
       <div style="border-left:3px solid var(--maroon); padding-left:13px;">
-        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-shield-halved" style="color:var(--maroon);"></i> <strong>How do we evaluate an autonomous operator?</strong></p>
-        <p style="font-size:12pt; margin:3px 0 0;">Human gates, k8s vs bubblewrap/eBPF isolation, a trust ladder with an eval-harness promotion gate.</p></div>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-shield-halved" style="color:var(--maroon);"></i> <strong>How do we evaluate &mdash; and secure &mdash; an autonomous operator?</strong></p>
+        <p style="font-size:12pt; margin:3px 0 0;">Human gates, k8s vs bubblewrap/eBPF isolation, credential brokering so agents never hold raw secrets, a trust ladder with an eval-harness promotion gate.</p></div>
       <div style="border-left:3px solid var(--teal); padding-left:13px;">
         <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-box" style="color:var(--teal);"></i> <strong>What makes an environment truly portable?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">pixi-native batch as the default? Supply-chain policy for conda-forge?</p></div>
@@ -1456,10 +1456,11 @@ oidc_audience = rucio</code></pre>
       </div>
       <div class="card teal">
         <h3>Mentoring pipeline, right now</h3>
-        <p style="font-size:12.5pt;">Three students on <strong>pyhs3</strong> across three funding
-           streams: an IRIS-HEP fellow (benchmarking), a UCSC summer student (validation), a DEMOS summer
-           student (porting distributions to <strong>pytensor</strong>). Diversified, not concentrated
-           in one grant.</p>
+        <p style="font-size:12pt;">Four students, four funding contexts: three on <strong>pyhs3</strong> &mdash;
+           an IRIS-HEP fellow (benchmarking), a UCSC summer student (validation), a DEMOS summer student
+           (porting distributions to <strong>pytensor</strong>) &mdash; plus one on <strong>USATLAS Facility
+           Benchmarking</strong>: typical user analysis workflows, compared across facilities. Diversified,
+           not concentrated in one grant.</p>
       </div>
     </div>
     <div class="callout" style="margin-top:12px;">
@@ -1475,11 +1476,13 @@ oidc_audience = rucio</code></pre>
     HEP-SPIn (HEP Software Packaging Initiative) proposal-writing experience is on-slide, softened per
     Giordon's call -- the on-slide text doesn't say whether it was funded; if asked directly in Q&A, answer
     honestly (it was not funded) rather than dodging, but don't volunteer it unprompted. BMBF/BMFTR hop-on
-    fellowship w/ TUM funds a DEMOS probability-model portal; three students (IRIS-HEP fellow, UCSC summer,
-    DEMOS summer) all on
-    pyhs3 across three different funding sources — that IS the leadership story: I mentor across a
-    diversified base, I don't own one big grant. The SUSY-combination coordination (14 analyses, ~5 years,
-    a dozen teams) is your strongest concrete leadership proof — say it aloud even if the slide stays in
+    fellowship w/ TUM funds a DEMOS probability-model portal; four students across four funding contexts:
+    three on pyhs3 (IRIS-HEP fellow, UCSC summer, DEMOS summer), plus one on USATLAS Facility Benchmarking
+    (comparing typical user analysis-workflow performance across different facilities — ties nicely back to
+    the proof-operations numbers earlier in the talk if anyone connects the dots). That IS the leadership
+    story: I mentor across a diversified base, I don't own one big grant. The SUSY-combination coordination
+    (14 analyses, ~5 years, a dozen teams) is your strongest concrete leadership proof — say it aloud even
+    if the slide stays in
     backup. DO NOT claim a Nikhef-specific funding target or call; be honest there's no plan yet, and name
     ESCAPE/EOSC/WLCG/Horizon Europe only as "natural collaborations," not commitments.
   </aside>
