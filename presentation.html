@@ -94,6 +94,11 @@
     Deliver it as a thesis, then promise the structure: (1) a working existence proof, (2) the
     architecture that makes it portable, (3) the agenda — identity, trust, packaging, equity — and
     (4) Nikhef + ESCAPE + discussion.
+    SPOKEN ROADMAP (say it here, no slide needed): "Everything I show you maps onto six things Nikhef
+    already cares about — Tier-1 computing, AI/ML infrastructure, ESCAPE, multi-experiment support,
+    trusted federation, and AI for scientists." That one sentence reframes the whole talk as evidence
+    for Nikhef, not a tour of my platform — say "Physics Data Processing" and "Tier-1" out loud whenever
+    the slide already implies them; the mouth should hammer these harder than the text does.
     Keep this slide tight: it's the research thesis, not a storage anecdote (that's the next slide).
   </aside>
 </section>
@@ -173,12 +178,13 @@
   <h2>The ecosystem framing (Watts)</h2>
   <div class="content">
     <blockquote style="font-size:19pt;">&ldquo;It&rsquo;s not about a smarter LLM — it&rsquo;s about smarter infrastructure around&nbsp;it.&rdquo;
-      <cite>G.&nbsp;Watts, &ldquo;Beyond Code Generation,&rdquo; CHEP&nbsp;2026</cite></blockquote>
+      <cite>G.&nbsp;Watts, <a href="https://indico.cern.ch/event/1471803/contributions/6969164/">&ldquo;Beyond Code Generation,&rdquo; CHEP&nbsp;2026</a></cite></blockquote>
     <ul>
       <li><strong>His framing:</strong> data &amp; tools &rarr; MCP &rarr; skills &rarr; agents; grounded in primary sources; &ldquo;we need a <strong>pip-install</strong>.&rdquo;</li>
       <li><strong>This talk:</strong> the facility-context layer is the decisive one, it ports, and the open problems are identity, trust, packaging, and equity.</li>
     </ul>
   </div>
+  <div class="footnote">Watts, CHEP&nbsp;2026: indico.cern.ch/event/1471803/contributions/6969164</div>
   <aside class="notes">Credit-where-due backup. Pull up only if asked "how does this relate to Watts/CHEP?".</aside>
 </section>
 </section>
@@ -212,17 +218,20 @@
        <strong>Storage:</strong> /home NFS 19&nbsp;TB (100&nbsp;GB/user) &middot; /data + /cold Ceph 4.5&nbsp;PB each (/data 5&nbsp;TB/user, not backed up).</p>
     <div class="callout teal" style="margin-top:12px;">
       <p>Triton IaaS + a <strong>REANA</strong> workflow cluster already make this an <strong>AI/ML platform</strong>.
-         The agentic layer sits on infrastructure I operate &mdash; <strong>systems engineering I do hands-on</strong>, not a slide-deck vision.</p></div>
+         This is exactly the <strong>Physics Data Processing</strong> problem &mdash; the agentic layer sits on
+         infrastructure I operate, <strong>systems engineering I do hands-on</strong>, not a slide-deck vision.</p></div>
   </div>
+  <div class="footnote">Triton&rarr;Athena inference: V.&nbsp;Tsulaia, <a href="https://indico.cern.ch/event/1471803/contributions/6967260/">CHEP&nbsp;2026</a>.</div>
   <aside class="notes">
     Purpose: establish operations + data-processing + ML-serving credibility BEFORE the agentic vision,
     because the role is data-processing-infrastructure-first. Say out loud: "before I argue about where AI
-    is going, here's the infrastructure I run day to day." Real numbers: ~800 users; HTCondor 1520-core
-    long queue (7d) + 1280-core short queue (4h, spills into long), hyperconverged / software-sliced;
-    4 SSH + 4 Jupyter nodes; /home NFS 19TB (100GB/user), /data Ceph 4.5PB (5TB/user, NOT backed up),
-    /cold Ceph 4.5PB (no per-user quota, parks retired-user data before deletion). Triton IaaS = the literal
-    "infrastructure for AI/ML" in the job title; Dask Gateway + REANA + benchmarking = HTC / data-management /
-    systems operation. Keep it to ~45s; it's a credibility anchor, not a deep dive.
+    is going, here's the infrastructure I run day to day. This is exactly the Physics Data Processing
+    problem the posting describes." Real numbers: ~800 users; HTCondor 1520-core long queue (7d) + 1280-core
+    short queue (4h, spills into long), hyperconverged / software-sliced; 4 SSH + 4 Jupyter nodes; /home NFS
+    19TB (100GB/user), /data Ceph 4.5PB (5TB/user, NOT backed up), /cold Ceph 4.5PB (no per-user quota, parks
+    retired-user data before deletion). Triton IaaS = the literal "infrastructure for AI/ML" in the job title;
+    Dask Gateway + REANA + benchmarking = HTC / data-management / systems operation. Keep it to ~45s; it's a
+    credibility anchor, not a deep dive.
   </aside>
 </section>
 
@@ -249,6 +258,7 @@
       <p>Every one of these is the same move: <strong>write the facility down once, let any agent inherit it.</strong> Multi-experiment from day one — the Rucio MCP serves four VOs behind one endpoint.</p>
     </div>
   </div>
+  <div class="footnote">Web chat: <a href="https://af.uchicago.edu/chat">af.uchicago.edu/chat</a> &middot; usage observability: <a href="https://grafana.af.uchicago.edu/d/rucio-mcp-01/rucio-mcp">Grafana</a> (Prometheus metrics per site/tool).</div>
   <aside class="notes">
     This single montage condenses the whole "what runs today" tour; each card is a thing you can
     open in questions. The Jupyter-from-phone card is promoted to its own live-demo slide (next).
@@ -271,7 +281,8 @@
     <div style="display:grid; grid-template-columns: 0.82fr 1.18fr; gap:26px; align-items:center;">
       <div>
         <p>An in-pod <strong>MCP server</strong> exposes a running JupyterLab. Any MCP client &mdash; my
-           laptop, or the phone in my hand &mdash; drives it through the <strong>brokered gateway</strong>.</p>
+           laptop, or the phone in my hand &mdash; drives it through a <strong>brokered gateway</strong>
+           I&rsquo;ll show you shortly.</p>
         <ul style="font-size:13.5pt; margin-top:6px;">
           <li>Same identity, same audit as every other tool call.</li>
           <li>No notebook UI on the device &mdash; just intent in, results out.</li>
@@ -280,20 +291,22 @@
       </div>
       <div style="text-align:center;">
         <video src="images/jupyter-mcp-demo.mp4" controls muted playsinline
-               style="max-height:430px; max-width:100%; border-radius:10px; box-shadow:0 8px 28px rgba(92,0,0,0.18);"></video>
+               style="max-height:380px; max-width:100%; border-radius:10px; box-shadow:0 8px 28px rgba(92,0,0,0.18);"></video>
       </div>
     </div>
+    <div class="callout teal" style="margin-top:12px;">
+      <p>The interesting thing isn&rsquo;t the phone. It&rsquo;s that my <strong>identity, authorization,
+         audit, and facility context</strong> followed me to it &mdash; that&rsquo;s a new architecture, not a trick.</p></div>
   </div>
-  <div class="footnote">Live demo; the recording is the fallback if the network misbehaves.</div>
+  <div class="footnote">Built on the <a href="https://jupyter-mcp-server.datalayer.tech/providers/jupyter-streamable-http-extension/">Jupyter MCP streamable-HTTP extension</a> &middot; full-length recording: <a href="https://drive.google.com/file/d/1H5k_-l_fpzj4PRB7e_rlh_jY6SGyDPEM/view">Google Drive</a>.</div>
   <aside class="notes">
-    THE crowd-pleaser. Run it live: open an MCP client on my phone, ask it to do something in a live
-    AF JupyterLab pod (load a dataset, make a plot), show the result come back. If wifi/AV is shaky,
-    just play the embedded jupyter-mcp-demo.mp4 and narrate it.
+    THE crowd-pleaser, but land it as architecture, not a trick. Run it live: open an MCP client on my
+    phone, ask it to do something in a live AF JupyterLab pod (load a dataset, make a plot), show the
+    result come back. If wifi/AV is shaky, just play the embedded jupyter-mcp-demo.mp4 and narrate it.
     Mechanism to say out loud: a Jupyter MCP server runs INSIDE the user's notebook pod; the client
     speaks MCP to it through the same credential-brokered gateway (§3a), so it inherits the user's
-    identity and the audit trail. The point isn't "cool, a phone" — it's that the facility's identity
-    and context travel with the agent to any client, with zero install.
-    Keep it to ~90 seconds; the demo is evidence for the thesis, not the thesis.
+    identity and the audit trail. SAY THE ON-SLIDE LINE OUT LOUD after the clip — it's the whole point
+    of the demo, not a throwaway. Keep it to ~90 seconds; the demo is evidence for the thesis, not the thesis.
   </aside>
 </section>
 
@@ -447,11 +460,16 @@
   </aside>
 </section>
 
-<!-- Theme 1 lead-in -->
-<section id="theme-trust" class="section-divider" data-state="is-section-divider">
-  <p class="section-num">3.1</p>
-  <p class="kicker">Agenda &middot; theme one</p>
-  <h1>Identity, access &amp; trust</h1>
+<!-- Theme 1 lead-in (lightweight, not a full divider — avoids a double-title feel right after divider-3) -->
+<section id="theme-trust">
+  <p class="kicker">Agenda &middot; theme 3.1 of 3</p>
+  <h2>Identity, access &amp; <span class="accent">trust</span></h2>
+  <div class="content">
+    <div class="callout" style="margin-top:4px;">
+      <p>Before an agent does anything useful, the facility has to answer <strong>who it is, what it may
+         touch, and how it earns more rope.</strong></p></div>
+    <p class="text-muted" style="margin-top:14px;">Gateway &middot; identity (CIMD/DCR) &middot; ssh-oidc &middot; sandboxing &middot; the trust ladder.</p>
+  </div>
   <aside class="notes">Thesis to say: before an agent does anything useful, the facility has to answer
     who it is, what it may touch, and how it earns more rope. Covers gateway, CIMD, ssh-oidc, sandboxing,
     the trust ladder.</aside>
@@ -472,8 +490,9 @@
     <div class="callout teal" style="margin-top:6px;">
       <p>This is the <strong>strategic boundary</strong>: identity, authZ, credential brokering, and audit
          in one place. It&rsquo;s the natural way to put an agentic layer in front of a <strong>Tier-1 / PDP</strong>
-         service estate without handing tokens to a chatbot.</p></div>
+         service estate without handing tokens to a chatbot &mdash; the same boundary a Tier-1 needs regardless of AI.</p></div>
   </div>
+  <div class="footnote"><a href="https://github.com/kratsg/rucio-mcp">rucio-mcp</a> &middot; <a href="https://github.com/kratsg/ami-mcp">ami-mcp</a> &middot; <a href="https://github.com/atlas-outreach-data-tools/atlasopenmagic-mcp">atlasopenmagic</a> &middot; <a href="https://panda-wms.readthedocs.io/en/latest/advanced/mcp.html">panda-mcp</a> &middot; <a href="https://indico.cern.ch/event/1471803/contributions/6967102/">condor-mcp</a> (Bockelman, CHEP&nbsp;2026).</div>
   <aside class="notes">
     Built on github.com/kratsg/af-mcp-platform (see research.md §AF-MCP). Real numbers: ~800 users,
     single endpoint mcp.af.uchicago.edu, brokers to Rucio/PanDA/AMI/GitLab/Jupyter/HTCondor.
@@ -503,7 +522,7 @@
       <div class="card"><h3 style="font-size:15pt;">Single gateway</h3>
         <p style="font-size:12pt;"><i class="fa-solid fa-check text-teal"></i> one identity &nbsp; <i class="fa-solid fa-triangle-exclamation text-maroon"></i> token sprawl / choke point</p></div>
     </div>
-    <p class="text-muted" style="font-size:12.5pt; margin-top:10px;">FastMCP composition = one auth provider per server; that constraint drives a lot of the design.</p>
+    <p class="text-muted" style="font-size:12.5pt; margin-top:10px;"><a href="https://gofastmcp.com/servers/composition">FastMCP</a> composition = one auth provider per server; that constraint drives a lot of the design.</p>
   </div>
   <aside class="notes">BACKUP for the auth-curious (Campana/Verkerke may push here). Ties directly into the DCR-vs-CIMD slide.</aside>
 </section>
@@ -513,27 +532,32 @@
 <section>
 <section id="agenda-identity">
   <p class="kicker">Agenda &middot; identity is the bottleneck</p>
-  <h2>Who is this agent, and may it act <span class="accent">as you</span>?</h2>
+  <h2>Who is this <span class="accent">client</span>, and may it act as you?</h2>
   <div class="content">
-    <ul>
-      <li>WLCG is mid-transition <strong>x509 &rarr; OIDC tokens</strong>; agents make identity the gating problem, not an afterthought.</li>
-      <li>How does a server trust a client it has never seen? Two answers:
-        <strong>DCR</strong> (dynamic client registration — stateful, a <code>/register</code> endpoint, operational sprawl)
-        vs <strong>CIMD</strong> (the client_id <em>is</em> an HTTPS URL to a metadata doc the server fetches — stateless, domain-trust).</li>
-      <li>I favour <strong>CIMD</strong>: no unbounded client DB, stable per-app identity, server-side allow-listing of trusted domains. It&rsquo;s the new MCP default (still firming up; SSRF must be handled).</li>
-      <li>This sits <em>on top of</em>, not instead of, the community&rsquo;s federated-identity work &mdash; WLCG token profiles, the AARC blueprint, IAM. CIMD solves <strong>client</strong> identity in the agent ecosystem; it complements the <strong>user</strong>/token identity chain we already have.</li>
-    </ul>
-    <div class="callout" style="margin-top:8px;">
-      <p>This is a place to <strong>shape the standard</strong>, not just consume it — a facility/Tier-1 voice
-         in how research infrastructure adopts token and client-identity models.</p></div>
+    <p>Every MCP client &mdash; Claude, an internal tool, something a student wrote &mdash; wants to connect.
+       Once agents are the ones knocking, this stops being a one-time setup step and becomes a
+       <strong>continuous, scalable decision</strong>:</p>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin:16px 0;">
+      <div class="node fill" style="font-size:14pt;">Who is it?<span class="sub">a durable identity, not just a name</span></div>
+      <div class="node fill" style="font-size:14pt;">Do we trust it?<span class="sub">policy, not vibes</span></div>
+      <div class="node fill" style="font-size:14pt;">How much authority?<span class="sub">scoped, auditable</span></div>
+    </div>
+    <div class="callout teal">
+      <p><strong>Identity is becoming the bottleneck</strong>, not an afterthought &mdash; exactly the identity
+         half of the <strong>Physics Data Processing</strong> problem, and WLCG&rsquo;s x509&rarr;OIDC transition
+         is the backdrop. Current standards are moving toward <strong>stateless client metadata</strong>
+         (a client&rsquo;s identity is a URL the server fetches) rather than a stateful registration database.
+         This sits <em>on top of</em> the community&rsquo;s federated-identity work &mdash; WLCG token profiles,
+         the AARC blueprint, IAM &mdash; not instead of it.</p></div>
   </div>
   <aside class="notes">
-    NOTE: Giordon wrote "CIDM"; the spec term is CIMD (Client ID Metadata Documents), SEP-991,
-    MCP spec 2025-11-25. Full detail + tradeoffs (SSRF, localhost, domain≠reputation, FastMCP
-    cimd_trust_policy allowlist) in research.md §CIMD. "for obvious reasons" = a facility serving
-    ~800 users + many clients does NOT want a stateful per-client registration DB; CIMD lets Nikhef
-    allow-list trusted clients (claude.ai, cursor.com, internal apps) and keep audit clean.
-    Keep main line conceptual; push the JSON/sequence-diagram to the backup below.
+    SIMPLIFIED main line (moved DCR/CIMD jargon to the two backups) — for a mixed colloquium room, the
+    memorable takeaway is "identity becomes the bottleneck," not "DCR vs CIMD." Say the three questions
+    out loud as the research problem. One sentence on the standard: "current standards are moving toward
+    stateless client metadata" — that's CIMD, named for the curious, defined in the backup. AARC/WLCG
+    line matters for Groep/Campana in the room. This is a place to shape the standard, not just consume
+    it — a facility/Tier-1 voice in how research infrastructure adopts client-identity models.
+    Full DCR-vs-CIMD mechanics + the real trace are the two backups (down-arrow) if pressed.
   </aside>
 </section>
 
@@ -553,14 +577,50 @@
     </ul>
     <p class="text-muted" style="font-size:12pt; margin-top:8px;">Concretely in FastMCP: <code>CIMDTrustPolicy(trusted_domains=["claude.ai","cursor.com"], auto_approve_trusted=True)</code> &mdash; the facility decides which domains skip consent.</p>
   </div>
+  <div class="footnote">Auth today reuses grid creds (x509) or Keycloak OIDC &mdash; <a href="https://github.com/kratsg/rucio-mcp/blob/main/docs/rucio-oauth-bridge.md">OAuth bridge docs</a>.</div>
   <aside class="notes">BACKUP. The client_id IS the HTTPS URL to a metadata doc the client hosts; the authn server
   fetches it on demand, validates client_id == source URL and the redirect_uris, then applies its own
   policy. Read-only, stateless, fetch-on-demand. Spec status: adopted into MCP 2025-11-25 via SEP-991,
   from an IETF draft promoted to WG status Oct 2025 (origins in IndieAuth; in production at Bluesky);
   MCP Python SDK added minimal client-side support in v1.23.0, server-side still maturing. Stance:
-  CIMD = SHOULD, DCR = MAY, pre-registration still allowed. Sources: MCP blog, Auth0/WorkOS/Stytch,
-  SEP-991, FastMCP #2863 (research.md §CIMD). Software statements (RFC 7591 §2.3) / OS attestation are
-  the next layer if asked.</aside>
+  CIMD = SHOULD, DCR = MAY, pre-registration still allowed. Software statements (RFC 7591 §2.3) / OS
+  attestation are the next layer if asked. The second backup (down-arrow) has a real trace, the actual
+  Claude client_id URLs, and the full spec list — pull that up only if someone like Groep or Campana
+  pushes on mechanics.</aside>
+</section>
+
+<section id="agenda-identity-trace">
+  <!-- DEEP-DIVE / BACKUP 2 : real trace, bleeding-edge status, spec list -->
+  <p class="kicker">Deep-dive &middot; it&rsquo;s this new</p>
+  <h2>CIMD, live, in <span class="accent">Claude Code today</span></h2>
+  <div class="content">
+    <pre><code class="block" style="font-size:11pt;">claude mcp add --transport http cimd-test https://&lt;tunnel&gt;/mcp
+POST /mcp                                          ua=claude-code/2.1.142
+GET  /.well-known/oauth-protected-resource
+GET  /.well-known/oauth-authorization-server
+GET  /oauth/authorize?response_type=code
+       &amp;client_id=https%3A%2F%2Fclaude.ai%2Foauth%2Fclaude-code-client-metadata
+       &amp;redirect_uri=http%3A%2F%2Flocalhost%3A61264%2Fcallback&amp;code_challenge_method=S256</code></pre>
+    <p style="font-size:12.5pt;">The <code>client_id</code> <em>is</em> a URL, not a UUID &mdash; one per Claude surface:</p>
+    <ul style="font-size:12.5pt;">
+      <li><code>claude.ai/oauth/claude-code-client-metadata</code> &mdash; Claude Code</li>
+      <li><code>claude.ai/oauth/mcp-oauth-client-metadata</code> &mdash; Web / Desktop / Mobile</li>
+    </ul>
+    <p class="text-muted" style="font-size:11.5pt; margin-top:6px;">This is <em>weeks</em> old, not years &mdash; the community is still asking
+       &ldquo;does CIMD even work in the Claude Desktop/Web client yet?&rdquo; on r/ClaudeAI.</p>
+  </div>
+  <div class="footnote">RFC&nbsp;7591/7592 (DCR + management) &middot; RFC&nbsp;8252&nbsp;&sect;7.3 (loopback redirect) &middot; RFC&nbsp;8707 (resource indicators) &middot; <a href="https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization">MCP authorization spec</a> &middot; <a href="https://www.ietf.org/archive/id/draft-parecki-oauth-client-id-metadata-document-02.html">Parecki, CIMD draft</a> &middot; <a href="https://claude.com/docs/connectors/building/authentication">Anthropic connector auth docs</a>.</div>
+  <aside class="notes">
+    SECOND BACKUP, only for the identity-mechanics-curious (Groep/Campana territory). Trace + client_id
+    URLs from a Claude Code 2.1.142 CIMD test against a tunnel MCP server (leduccc, Medium, "Testing CIMD
+    support across Anthropic's Claude products"). The core argument from that piece: DCR is a permanent
+    operational liability (an open /register endpoint becomes the AS operator's abuse-and-garbage-collection
+    problem; RFC 7591 leaves gating entirely to the operator). CIMD's trust anchor is the URL's origin —
+    "if the client_id is on claude.ai, the AS already knows whether it trusts claude.ai" — fetched fresh
+    each time, no stored state, no admission policy to write. Emphasize HOW NEW this is: version-pinned CLI
+    behavior, an active Reddit thread asking whether other Claude surfaces support it yet. Good honest
+    "we are standing on a moving floor" beat for a room that includes IETF-draft-literate people.
+  </aside>
 </section>
 </section>
 
@@ -570,25 +630,44 @@
   <p class="kicker">Agenda &middot; access without keys</p>
   <h2>ssh-less, key-less: <span class="accent">log in with your federated identity</span></h2>
   <div class="content">
-    <ul>
-      <li>SSH keys are trusted <em>permanently</em> and spread across devices/teams — a poor fit for federated research infrastructure.</li>
-      <li><strong>ssh-oidc</strong> turns an OIDC token into SSH access two ways: a PAM module, or short-lived <strong>SSH certificates</strong> from an online CA (<code>oinit</code>), with <code>motley-cue</code> mapping federated identity &rarr; local account and provisioning just-in-time.</li>
-      <li>Bonus: <strong>&ldquo;non-username&rdquo; login</strong> and it still works with <code>rsync</code>/<code>git</code>-over-ssh.</li>
-    </ul>
-    <div class="callout teal" style="margin-top:8px;">
+    <p>SSH keys are trusted <em>permanently</em>, live on disk or in an agent socket, and spread across
+       devices and teams &mdash; and now there&rsquo;s a new reader in the room: an AI agent with shell
+       access. <strong>ssh-oidc</strong> (KIT/EOSC-synergy, AARC-native) is one toolkit that replaces the
+       permanent key with a short-lived, revocable, federated credential.</p>
+    <div style="display:grid; grid-template-columns: 1.3fr 1fr 1.5fr; gap:14px; margin:14px 0;">
+      <div class="node slate" style="font-size:13pt;">Private key<span class="sub">on disk / in ssh-agent, forever</span></div>
+      <div class="node slate" style="font-size:13pt;">Anything with agent access<span class="sub">incl. an LLM agent</span></div>
+      <div class="node fill" style="font-size:13pt;">Can sign in as you<span class="sub">no expiry, no federation, hard to revoke</span></div>
+    </div>
+    <p class="text-center text-maroon" style="font-size:16pt; margin:2px;"><i class="fa-solid fa-arrows-down-to-line"></i></p>
+    <div style="display:grid; grid-template-columns: 1.3fr 1fr 1.5fr; gap:14px; margin:4px 0 12px;">
+      <div class="node teal" style="font-size:13pt;">Federated OIDC token<span class="sub">minutes, from your IdP</span></div>
+      <div class="node teal" style="font-size:13pt;"><code style="font-size:11.5pt;">motley-cue</code><span class="sub">identity &rarr; account, JIT</span></div>
+      <div class="node fill" style="font-size:13pt;">PAM token <em>or</em> SSH cert<span class="sub"><code style="font-size:10.5pt; color:#FFFFFF; background:rgba(255,255,255,0.18);">pam-ssh-oidc</code> / <code style="font-size:10.5pt; color:#FFFFFF; background:rgba(255,255,255,0.18);">oinit</code> &mdash; short-lived, revocable</span></div>
+    </div>
+    <div class="callout teal">
       <p>The push: <strong>OIDC tokens + SSH certificates across the toolchain</strong>, so the same identity
-         that authorises a dataset read also authorises a shell — and an agent inherits it cleanly.</p></div>
+         that authorises a dataset read also authorises a shell &mdash; and an agent inherits a short-lived
+         credential, never a permanent private key.</p></div>
   </div>
   <div class="footnote">ssh-oidc: Gudu, Hardt et&nbsp;al. (KIT / EOSC-synergy). &ldquo;SSH with federated identities,&rdquo; CHEP&nbsp;2026; EPJ Res.&nbsp;Infra. 2025, doi:10.1007/s41781-025-00136-5.</div>
   <aside class="notes">
     KIT/EOSC-synergy work (Diana Gudu, Marcus Hardt et al.); WLCG x509→token transition is the backdrop.
-    Components: oidc-agent (client), motley-cue (server mapping/provisioning), pam-ssh-oidc, oinit (cert CA), mccli (wrapper).
-    CITATION VERIFIED: the CHEP-2026 contribution is "SSH with federated identities" (Gudu, Hardt, KIT;
-    co-author Zachmann), indico.cern.ch/event/1471803/contributions/6967098 — now on the footnote.
+    THE DIAGRAM'S POINT (make it explicit): pam-ssh-oidc, oinit, motley-cue, and oidc-agent are NOT four
+    competing tools — they're all ONE toolkit (ssh-oidc). oidc-agent obtains/holds the federated token
+    client-side; motley-cue is the server daemon that maps that identity to a local account and provisions
+    it just-in-time; pam-ssh-oidc and oinit are the two alternative LAST STEPS (PAM challenge-response vs
+    a short-lived SSH certificate from an online CA) that actually get you a shell. mccli wraps oidc-agent+
+    motley-cue together for the end user.
+    THE AGENT-SAFETY ANGLE (new, say it explicitly): today, anything with access to your ssh-agent socket —
+    including a coding agent you gave shell access to — can ask it to sign with your permanent private key.
+    ssh-oidc's credential is short-lived and federated: even if an agent touches it, the blast radius is
+    minutes, not forever, and it's revocable at the identity provider instead of requiring a key rotation
+    across every host you've ever used.
     NIKHEF/EUROPE ANGLE: frame ssh-oidc as the AARC/EOSC-native answer it is (KIT/EOSC-synergy) — this is
     the room's OWN ecosystem, not a web-industry import. Say "AARC" explicitly; David Groep (host) is an
-    AARC authority and will appreciate it. Ties to PDP federated identity. Detail in research.md §ssh-oidc. Backup slide below
-    for PAM-vs-cert mechanics if asked.
+    AARC authority and will appreciate it. Ties to PDP federated identity. Detail in research.md §ssh-oidc.
+    Backup slide below for PAM-vs-cert mechanics if asked.
   </aside>
 </section>
 
@@ -597,6 +676,7 @@
   <p class="kicker">Deep-dive &middot; ssh-oidc internals</p>
   <h2>PAM token vs. SSH certificate</h2>
   <div class="content">
+    <p class="text-muted" style="font-size:12.5pt; margin:0 0 10px;">Both are last-mile options within the <strong>same ssh-oidc toolkit</strong> &mdash; <code>oidc-agent</code> holds the token client-side, <code>motley-cue</code> maps identity&rarr;account server-side, then one of these two gets you a shell.</p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
       <div class="card"><h3 style="font-size:15pt;">PAM (pam-ssh-oidc)</h3>
         <p style="font-size:12.5pt;">Paste/forward an access token; motley-cue verifies it; OTP fallback when token &gt; 1023 B (OpenSSH limit). Unmodified sshd.</p></div>
@@ -604,7 +684,7 @@
         <p style="font-size:12.5pt;">Online CA issues a short-lived SSH cert in exchange for a token; stored in ssh-agent; transparent for rsync/git; no per-host key trust.</p></div>
     </div>
   </div>
-  <aside class="notes">BACKUP. Both rely on motley-cue for identity→account mapping + JIT provisioning. EPJ paper + KIT talks in research.md.</aside>
+  <aside class="notes">BACKUP. Both rely on motley-cue for identity→account mapping + JIT provisioning. mccli wraps oidc-agent+motley-cue for the end user. EPJ paper + KIT talks in research.md.</aside>
 </section>
 </section>
 
@@ -700,10 +780,15 @@
 </section>
 
 <!-- Theme 2 lead-in -->
-<section id="theme-ops" class="section-divider" data-state="is-section-divider">
-  <p class="section-num">3.2</p>
-  <p class="kicker">Agenda &middot; theme two</p>
-  <h1>Operations &amp; portability</h1>
+<section id="theme-ops">
+  <p class="kicker">Agenda &middot; theme 3.2 of 3</p>
+  <h2>Operations &amp; <span class="accent">portability</span></h2>
+  <div class="content">
+    <div class="callout teal" style="margin-top:4px;">
+      <p>AI at every operational layer, on environments and clusters that <strong>ship and reproduce
+         anywhere.</strong></p></div>
+    <p class="text-muted" style="margin-top:14px;">Levels of autonomy &middot; the operational-AI fabric &middot; pixi &middot; cluster-as-code.</p>
+  </div>
   <aside class="notes">Thesis: AI at every operational layer, on environments and clusters that ship and
     reproduce anywhere. Covers levels, the operational-AI fabric, pixi, cluster-as-code.</aside>
 </section>
@@ -772,11 +857,12 @@
     <div style="text-align:center; margin:8px 0;">
       <img src="images/NEW-pixi-pack.svg" alt="A pixi project with a digest-pinned pixi.lock on the login node is packed by pixi-pack into a self-contained environment.tar, shipped without CVMFS, and recreated by pixi-unpack on a network-free worker node with an identical environment" style="max-width:100%; max-height:212px;">
     </div>
-    <p style="font-size:13.5pt; margin:0;">Backed by <strong>conda-forge</strong> + the HEP Packaging Community: ARM/HPC builds, supply-chain hardening (dependency cooldowns).</p>
+    <p style="font-size:13.5pt; margin:0;">Backed by <strong>conda-forge</strong> + the <a href="https://hep-packaging-coordination.github.io/.github/">HEP Packaging Coordination</a>: ARM/HPC builds, <a href="https://conda-forge.org/docs/maintainer/security/general-considerations/">supply-chain hardening</a> (dependency cooldowns).</p>
     <div class="callout teal" style="margin-top:10px;">
       <p>Why it matters for agents: an agent that builds an analysis must <strong>ship the same environment
          it tested</strong> to the cluster. pixi makes &ldquo;the env the agent used&rdquo; a portable, verifiable object.</p></div>
   </div>
+  <div class="footnote">M.&nbsp;Feickert, &ldquo;HEP Packaging Coordination: distributing the HEP software ecosystem on conda-forge,&rdquo; <a href="https://matthewfeickert-talks.github.io/talk-chep-2026/">CHEP&nbsp;2026</a> &middot; <a href="https://proceedings.scipy.org/articles/nwuf8465#pixi">SciPy proceedings</a>.</div>
   <aside class="notes">
     Detail + adoption (Purdue AF, Oregon State, Feickert SciPy proceedings, Dask Gateway pixi_project,
     pixi-pack self-extracting binaries, Apptainer note) in research.md §pixi.
@@ -812,10 +898,15 @@
 </section>
 
 <!-- Theme 3 lead-in -->
-<section id="theme-commons" class="section-divider" data-state="is-section-divider">
-  <p class="section-num">3.3</p>
-  <p class="kicker">Agenda &middot; theme three</p>
-  <h1>Equity &amp; the commons</h1>
+<section id="theme-commons">
+  <p class="kicker">Agenda &middot; theme 3.3 of 3</p>
+  <h2>Equity &amp; the <span class="accent">commons</span></h2>
+  <div class="content">
+    <div class="callout" style="margin-top:4px;">
+      <p>Who gets to use the models, what agents may reach, and where shared context lives &mdash;
+         <strong>facility and community decisions, not personal ones.</strong></p></div>
+    <p class="text-muted" style="margin-top:14px;">Equity of inference &middot; agents and the open web &middot; the skills commons.</p>
+  </div>
   <aside class="notes">Thesis: who gets to use the models, what agents may reach, and where shared context
     lives, these are facility and community decisions, not personal ones. Covers equity, open-web,
     skills-commons.</aside>
@@ -830,7 +921,7 @@
     <ul>
       <li>If agentic analysis becomes normal, <strong>access to inference becomes a fairness issue</strong>:
         a credit-card-per-student model entrenches inequality between groups and countries.</li>
-      <li>A facility can <strong>host open-weight models on its own GPUs</strong> (NRP-style) for equitable, cost-controlled baseline access&hellip;</li>
+      <li>A facility can <strong>host open-weight models on its own GPUs</strong> (<a href="https://nrp.ai/">NRP</a>-style) for equitable, cost-controlled baseline access&hellip;</li>
       <li>&hellip;and <strong>host the foundational models experiments depend on</strong>, so reconstruction/inference services aren&rsquo;t hostage to a single vendor or budget line.</li>
       <li><strong>Bridge identity, don&rsquo;t fork it:</strong> exchange a scientist&rsquo;s WLCG/SciTokens credential for a scoped token an inference backend accepts (OAuth&nbsp;2.0 Token Exchange, RFC&nbsp;8693) &mdash; MCP-aware, so it scopes which models <em>and</em> which tools.</li>
     </ul>
@@ -877,7 +968,7 @@
       <p>Self-hosting <strong>open weights</strong> on facility GPUs collapses the per-run cost to ~GPU time &mdash;
          the equity lever. A credit-card-per-student model does the opposite, between groups and between countries.</p></div>
   </div>
-  <div class="footnote">Tiers from per-Mtok list prices (input&nbsp;+&nbsp;output), ballpark; the 1M&nbsp;+&nbsp;1M budget is illustrative. Agents already run analyses end-to-end: Moreno et&nbsp;al., arXiv:2603.20179.</div>
+  <div class="footnote">Tiers from per-Mtok list prices (input&nbsp;+&nbsp;output) via the <a href="https://www.aipricing.guru/calculators/token-cost/">AI token pricing calculator</a>, ballpark; the 1M&nbsp;+&nbsp;1M budget is illustrative. Agents already run analyses end-to-end: Moreno et&nbsp;al., arXiv:2603.20179.</div>
   <aside class="notes">
     BACKUP (down-arrow from equity). Bars are $/run for the ~1M-in + 1M-out floor, abstracted to three tiers
     (frontier-hosted $100-200+, mid-hosted $15-35, open-weight self-hosted = GPU time only) so it's
@@ -932,8 +1023,9 @@
   <div class="content">
     <ul>
       <li>Skills are the durable context layer &mdash; but who hosts them, who maintains them, and how do we stop every experiment forking the same skill?</li>
-      <li>A live debate in ATLAS right now: a <strong>single-source marketplace</strong> (reference skills by URL, fix upstream) vs duplicated copies; docs kept <em>next to the source code</em>; official, e-group-governed repos over personal ones.</li>
+      <li>A live debate in ATLAS right now: a <strong>single-source marketplace</strong> (reference skills by URL, fix upstream) vs duplicated copies; docs kept <em>next to the source code</em>; official, e-group-governed repos over personal ones. Still open: how to <em>link</em>, not copy (<a href="https://github.com/usatlas/marketplace/issues/60">usatlas/marketplace#60</a>).</li>
       <li>As the library grows, <strong>semantic confusability</strong> bites (overlapping descriptions degrade routing) &rarr; skill-design guides + an <strong>eval/lint harness</strong> to keep skills orthogonal.</li>
+      <li>A third option worth watching: <strong>package skills like software</strong>. <a href="https://prefix.dev/channels/skill-forge">prefix.dev&rsquo;s skill-forge</a> distributes agent skills as versioned <strong>conda/pixi packages</strong> &mdash; the same lockfile discipline as <a href="#/agenda-pixi">pixi-native environments</a>, applied to context instead of code.</li>
     </ul>
     <div class="callout" style="margin-top:8px;">
       <p>I already operate a marketplace others are converging toward (following agentskills.io practice).
@@ -1044,35 +1136,36 @@
 <!-- SECTION 5 — DISCUSSION                                        -->
 <!-- ============================================================ -->
 <section id="discuss">
-  <p class="kicker">Let&rsquo;s decide together</p>
-  <h2>The open questions</h2>
+  <p class="kicker">Not engineering tickets &mdash; research questions</p>
+  <h2>What we don&rsquo;t know <span class="accent">yet</span></h2>
   <div class="content">
     <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:22px 30px;">
       <div style="border-left:3px solid var(--maroon); padding-left:13px;">
-        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-sitemap" style="color:var(--maroon);"></i> <strong>Identity &amp; granularity</strong></p>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-sitemap" style="color:var(--maroon);"></i> <strong>How should facilities expose context?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">One MCP per service or a gateway delegating identity? DCR or CIMD? Where does Nikhef&rsquo;s audit live?</p></div>
       <div style="border-left:3px solid var(--teal); padding-left:13px;">
-        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-map-location-dot" style="color:var(--teal);"></i> <strong>Where does context live?</strong></p>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-map-location-dot" style="color:var(--teal);"></i> <strong>How do we share context between facilities?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">Shipped with the facility, or a shared commons? Single-source vs forks; eval/lint for orthogonality; who keeps it true?</p></div>
       <div style="border-left:3px solid var(--maroon); padding-left:13px;">
-        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-shield-halved" style="color:var(--maroon);"></i> <strong>What may an agent do?</strong></p>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-shield-halved" style="color:var(--maroon);"></i> <strong>How do we evaluate an autonomous operator?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">Human gates, k8s vs bubblewrap/eBPF isolation, a trust ladder with an eval-harness promotion gate.</p></div>
       <div style="border-left:3px solid var(--teal); padding-left:13px;">
-        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-box" style="color:var(--teal);"></i> <strong>Portable environments</strong></p>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-box" style="color:var(--teal);"></i> <strong>What makes an environment truly portable?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">pixi-native batch as the default? Supply-chain policy for conda-forge?</p></div>
       <div style="border-left:3px solid var(--maroon); padding-left:13px;">
-        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-coins" style="color:var(--maroon);"></i> <strong>Who pays for inference?</strong></p>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-coins" style="color:var(--maroon);"></i> <strong>Who pays for inference, and is that fair?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">Hosted frontier vs self-hosted open weights on facility GPUs; equity as policy.</p></div>
       <div style="border-left:3px solid var(--teal); padding-left:13px;">
-        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-globe" style="color:var(--teal);"></i> <strong>Across sciences</strong></p>
+        <p style="margin:0; font-size:14.5pt;"><i class="fa-solid fa-globe" style="color:var(--teal);"></i> <strong>What becomes standardized, across sciences?</strong></p>
         <p style="font-size:12pt; margin:3px 0 0;">A commons spanning AFs, LHC experiments, and astroparticle (KM3NeT, Virgo, XENON) via ESCAPE &mdash; where&rsquo;s the facility/experiment line?</p></div>
     </div>
     <p class="text-center" style="margin-top:14px; font-size:15pt;"><strong>My bet:</strong> the model and harness are the easy part. <span class="text-maroon"><strong>Context, identity, trust, and equity</strong></span> are the facility&rsquo;s homework.</p>
   </div>
   <aside class="notes">
-    Closing provocation = the thesis restated as a to-do list. Then a SINGLE forward slide: "what I'd
-    build first at Nikhef" (next). These six map 1:1 to the §3 agenda, so the audience can re-enter any thread.
-    If running long, this slide and the next can merge.
+    Reframed from "open questions" to explicitly RESEARCH questions — a staff-scientist register, not an
+    engineering to-do list. Closing provocation = the thesis restated as six research questions. Then a
+    SINGLE forward slide: "what I'd build first at Nikhef" (next). These six map 1:1 to the §3 agenda, so
+    the audience can re-enter any thread. If running long, this slide and the next can merge.
   </aside>
 </section>
 
@@ -1083,19 +1176,19 @@
   <h2>What I&rsquo;d build <span class="accent">first</span></h2>
   <div class="content">
     <ul>
-      <li><strong>A credential-brokered MCP gateway</strong> in front of a Nikhef PDP&nbsp;/&nbsp;Tier-1 service &mdash; Nikhef&rsquo;s own identity and audit at the boundary. <span class="text-muted">[[FILL: funding route / which PDP service / collaborator]]</span></li>
-      <li><strong>pixi-native, network-free batch environments</strong> as a facility default &mdash; reproducible whether or not an agent wrote the code. <span class="text-muted">[[FILL: tie to a Tier-1 ops line / EU call]]</span></li>
-      <li><strong>The agentic layer on the ESCAPE VRE</strong> as a multi-science pilot &mdash; built once, ported to astroparticle. <span class="text-muted">[[FILL: ESCAPE/Horizon vehicle]]</span></li>
+      <li><strong>A credential-brokered MCP gateway</strong> in front of a Nikhef PDP&nbsp;/&nbsp;Tier-1 service &mdash; Nikhef&rsquo;s own identity and audit at the boundary.</li>
+      <li><strong>An evaluation &amp; safety harness for autonomous operations</strong> &mdash; the trust-ladder promotion gate, so autonomy is measured, not assumed.</li>
+      <li><strong>The agentic layer on the ESCAPE VRE</strong> as a multi-science pilot &mdash; built once, ported to astroparticle.</li>
     </ul>
     <div class="callout teal" style="margin-top:10px;">
-      <p>Concrete, fundable, and aligned with PDP&rsquo;s remit and the new AI/ML group &mdash; built to port, not to silo.</p></div>
+      <p>Infrastructure, standardization, and research &mdash; aligned with PDP&rsquo;s remit and the new AI/ML group, built to port, not to silo.</p></div>
   </div>
   <aside class="notes">
-    THE interview-closing slide. Vision-first lands here as 3 concrete, ownable deliverables, drawn straight
-    from the agenda: the credential-brokered gateway, pixi-native batch, and the ESCAPE VRE pilot. Land each
-    as "here's what Nikhef gets," tie each to a funding route aloud, then stop and open the floor. Keep the
-    visible list to 3. The funding/leadership backup (down-arrow) is there if the committee probes "can you
-    bring in money and lead a program?".
+    THE interview-closing slide. Three deliverables spanning infrastructure (gateway), research (eval/safety
+    harness — my most distinctive contribution, ties to the trust-ladder slide), and community/standardization
+    (ESCAPE pilot). Land each as "here's what Nikhef gets," then stop and open the floor. I don't have specific
+    funding calls or a formal 90-day plan to name yet — keep this to capability commitments, not funding
+    claims; the honest funding picture is the backup (down-arrow) if probed.
   </aside>
 </section>
 
@@ -1106,34 +1199,37 @@
   <div class="content">
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
       <div class="card">
-        <h3>Track record</h3>
-        <p style="font-size:12.5pt;">Built and sustained community tooling (pyhf, pyhs3) and analysis
-           infrastructure under [[FILL: which NSF/DOE awards — names/role]]; contribute to USATLAS
-           Operations (DOE) and IRIS-HEP (NSF); HEP-SPIn (DOE-proposed); a pending DOE proposal for
-           agentic AI; institutional partner in the BMBF-funded DEMOS project (currently unfunded,
-           pursuing funded participation).</p>
+        <h3>Funded today</h3>
+        <p style="font-size:12.5pt;">Split <strong>50/50</strong>: <strong>IRIS-HEP</strong> (NSF) and
+           <strong>USATLAS Operations</strong> (DOE base grant). Honest note: a HEP-SPIn proposal I helped
+           put forward <strong>was not funded</strong>. A BMBF/BMFTR &ldquo;hop-on&rdquo; fellowship with
+           <strong>TUM</strong> is funding a public probability-model portal for <strong>DEMOS</strong>.</p>
       </div>
       <div class="card teal">
-        <h3>What I&rsquo;d pursue at Nikhef</h3>
-        <p style="font-size:12.5pt;">[[FILL: target calls — NWO / Horizon Europe / EuroHPC?]] for
-           AI-in-science infrastructure, building on ESCAPE&rsquo;s Horizon lineage; co-PI with PDP and the
-           new AI/ML group. I supervise across hardware, software, and physics today and would grow a
-           group here.</p>
+        <h3>Mentoring pipeline, right now</h3>
+        <p style="font-size:12.5pt;">Three students on <strong>pyhs3</strong> across three funding
+           streams: an IRIS-HEP fellow (benchmarking), a UCSC summer student (validation), a DEMOS summer
+           student (porting distributions to <strong>pytensor</strong>). Diversified, not concentrated
+           in one grant.</p>
       </div>
     </div>
     <div class="callout" style="margin-top:12px;">
       <p>I&rsquo;ve coordinated multi-institution efforts &mdash; the ATLAS SUSY combination across ~14
-         analyses and a dozen teams, and the skills/marketplace commons. The program-leadership muscle,
-         not just the code.</p></div>
+         analyses and a dozen teams, and the skills/marketplace commons &mdash; the program-leadership
+         muscle, not just the code. I don&rsquo;t have a Nikhef-specific funding plan or named calls yet;
+         <strong>ESCAPE, EOSC, WLCG, and Horizon Europe</strong> are the natural collaborations I&rsquo;d
+         explore first.</p></div>
   </div>
   <aside class="notes">
-    Purpose: answer "can this person bring in money and lead a program?" Pull up if the committee probes
-    funding/leadership, or fold one line into the spoken close. The SUSY-combination coordination (14
-    analyses, ~5 years, a dozen teams) is your strongest concrete leadership proof — say it aloud even if
-    the slide stays in backup. DEMOS framing must stay honest: institutional partner, currently UNFUNDED,
-    pursuing funded participation — do not imply it funds you.
-    [[FILL: real award names/agencies/your role (PI/co-PI/senior personnel); EU funding targets. Do NOT
-    fabricate — if unknown, leave the markers and ask.]]
+    Purpose: answer "can this person bring in money and lead a program?" honestly. Pull up if the committee
+    probes funding/leadership. Real facts only: 50% IRIS-HEP (NSF) / 50% USATLAS Ops (DOE base grant);
+    HEP-SPIn was NOT funded (say so plainly, don't spin it); BMBF/BMFTR hop-on fellowship w/ TUM funds a
+    DEMOS probability-model portal; three students (IRIS-HEP fellow, UCSC summer, DEMOS summer) all on
+    pyhs3 across three different funding sources — that IS the leadership story: I mentor across a
+    diversified base, I don't own one big grant. The SUSY-combination coordination (14 analyses, ~5 years,
+    a dozen teams) is your strongest concrete leadership proof — say it aloud even if the slide stays in
+    backup. DO NOT claim a Nikhef-specific funding target or call; be honest there's no plan yet, and name
+    ESCAPE/EOSC/WLCG/Horizon Europe only as "natural collaborations," not commitments.
   </aside>
 </section>
 </section>
@@ -1161,6 +1257,7 @@
         </ul>
       </div>
     </div>
+    <p class="text-center text-maroon" style="font-size:16.5pt; font-weight:600; margin-top:18px;">I don&rsquo;t think every laboratory should build its own AI platform.<br>I think European research infrastructure should build this layer <span class="accent">together</span>.</p>
     <div style="border-top:1px solid var(--line-color); margin-top:16px; padding-top:12px;">
       <p style="margin:0; font-size:13.5pt;"><strong>In flight &amp; next:</strong>
          <span class="text-muted">server-side CIMD trust policies &middot; more brokered MCP backends &middot; the trust-ladder eval harness &middot; pixi-native batch as a default</span></p>
@@ -1168,10 +1265,12 @@
   </div>
   <div class="footnote">Giordon Stark &middot; kratsg &middot; Nikhef colloquium &middot; 2026&#8209;07&#8209;01.</div>
   <aside class="notes">
+    THE actual closing line — deliver it slowly, then stop talking. It reframes everything before it from
+    "here is my platform" to "here is the research and infrastructure program I would build with you."
     Keep individual UChicago AF names OFF this slide (avoid a wall of names in a colloquium close); credit the
     team collectively in speech instead — "genuinely a team effort at the UChicago AF." The "in flight & next"
-    strip fills the slide and signals ongoing work; [[FILL/confirm: swap in the items you'd actually call
-    in-development so you can speak to each honestly]]. Dropped the "in the spirit of Gordon Watts" line from
+    strip fills the slide and signals ongoing work; swap in the items you'd actually call
+    in-development so you can speak to each honestly. Dropped the "in the spirit of Gordon Watts" line from
     the footnote (the deck has moved well beyond that framing); Watts is still credited on the vocab backup.
     Note: I filled the closing bareness with this in-development strip rather than re-drawing the AF-MCP
     topology here (it's already the gateway slide); say the word if you'd rather repeat the diagram.
@@ -1183,8 +1282,8 @@
 </div>
 
 <!-- Build stamp: deploy.yml rewrites the inner text to "<short-sha> · <date>" at publish time;
-     stays "dev" for local viewing. Bottom-left so it never collides with reveal's c/t number. -->
-<div class="build-stamp" id="buildstamp">dev</div>
+     stays "dev" for local viewing. Top-right, links to the repo; slide number is bottom-left. -->
+<div class="build-stamp"><a href="https://github.com/kratsg/2026-07-01-nikhef-colloquium" id="buildstamp" target="_blank" rel="noopener">dev</a></div>
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@6.0.1/dist/reveal.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@6.0.1/dist/plugin/notes.js"></script>

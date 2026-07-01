@@ -38,10 +38,11 @@ jobs:
           cp presentation.html _site/index.html
           cp styles.css _site/styles.css
           if [ -d images ]; then cp -r images _site/images; fi
-          # Stamp the live build: rewrite the "dev" build-stamp to "<short-sha> · <date>".
-          # Anchored on the element id so nothing else in the page is touched.
+          # Stamp the live build: rewrite the "dev" build-stamp text to "<short-sha> · <date>".
+          # The buildstamp id is on an <a> tag (links to the repo); match ">dev<" after it,
+          # regardless of other attributes in between, so the link attrs aren't touched.
           STAMP="$(git rev-parse --short HEAD) · $(date -u +%Y-%m-%d)"
-          sed -i "s|id=\"buildstamp\">dev<|id=\"buildstamp\">${STAMP}<|" _site/index.html
+          perl -0pi -e "s/(id=\"buildstamp\"[^>]*>)dev(<)/\${1}${STAMP}\${2}/" _site/index.html
 
       - name: Build PDF (best-effort)
         continue-on-error: true
