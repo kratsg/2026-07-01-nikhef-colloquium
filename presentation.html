@@ -703,12 +703,16 @@ GET  /oauth/authorize?response_type=code
       <i class="fa-solid fa-arrow-right text-maroon"></i>
       <div class="node teal" style="font-size:13.5pt;">Privilege<span class="sub">earned, human-gated</span></div>
     </div>
-    <div class="callout" style="margin-top:8px;">
-      <p class="label"><i class="fa-solid fa-triangle-exclamation"></i> The honest gap</p>
-      <p>Today a harness can <em>advise</em> (managed <code>CLAUDE.md</code>, allow-lists) but can&rsquo;t reliably
-         <strong>hard-deny</strong> a command at the user level. Real blocking needs a privileged
-         <strong>policy engine</strong> on the node, or a sandbox &mdash; as a fellow facility sysadmin put it,
-         an agent just lets users 100&times; the bad behaviour we&rsquo;ve had for decades.</p></div>
+    <div class="callout" style="margin-top:8px; display:grid; grid-template-columns: 1fr auto; gap:16px; align-items:center;">
+      <div>
+        <p class="label"><i class="fa-solid fa-triangle-exclamation"></i> The honest gap</p>
+        <p>Today a harness can <em>advise</em> (managed <code>CLAUDE.md</code>, allow-lists) but can&rsquo;t reliably
+           <strong>hard-deny</strong> a command at the user level. Real blocking needs a privileged
+           <strong>policy engine</strong> on the node, or a sandbox &mdash; as a fellow facility sysadmin put it,
+           an agent just lets users 100&times; the bad behaviour we&rsquo;ve had for decades.</p>
+      </div>
+      <img src="images/NEW-control-meme.jpg" alt="Meme captioned I've got to keep control" style="max-height:100px; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.15); transform:rotate(1.5deg);">
+    </div>
   </div>
   <aside class="notes">
     SIMPLIFIED to a visual flow per review feedback — the paragraph-heavy version buried the shape. Say each
@@ -721,8 +725,10 @@ GET  /oauth/authorize?response_type=code
     Thain). A system-wide /etc/claude-code/CLAUDE.md + permission allow/deny is stronger than "notes" but is
     NOT kernel-level enforcement; cf. claude-code issue #70184 (can't reliably deny commands at user level).
     Lincoln's line: "Claude lets users 100x the same bad behaviour we've had for 30 years" — good honest
-    laugh beat, attribute lightly if asked. NIKHEF ANGLE: a Tier-1 with mixed bare-metal can't rely on k8s
-    isolation everywhere. HONEST NEAR-MISS (tell live, don't put on the slide): our held-job email agent hit
+    laugh beat, attribute lightly if asked. The meme in the corner is the punchline for that line — let it
+    land for a beat before moving on, don't over-explain it. NIKHEF ANGLE: a Tier-1 with mixed bare-metal
+    can't rely on k8s isolation everywhere. HONEST NEAR-MISS (tell live, don't put on the slide): our
+    held-job email agent hit
     a race condition once — two agents grabbed the same approval and it nearly double-sent — so we stood
     email-sending down until it was fixed. Human-in-the-loop gates caught it; "honest over flawless."
   </aside>
