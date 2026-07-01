@@ -24,6 +24,12 @@ rucio-mcp/
 marketplace/
 jupyter-mcp-server/
 flux_apps/
+elwood/
+shannon/
+
+# Old throughput-computing deck, kept locally as a reference source for
+# recovering citations -- not part of the Nikhef narrative, don't ship it here.
+presentation_throughput.html
 
 # OS / editor
 .DS_Store
